@@ -13,14 +13,11 @@ from Page_Functions.driver_manager import DriverManager
 
 class CreateUserTest:
     def __init__(self, language):
-
-        # self.driver = driver
-        # self.user_page = CreateUserPages(driver)
         self.driver = DriverManager.get_driver()
         self.language = language
         self.faker = Faker()
 
-# Supported translations for different languages
+        # Supported translations for different languages
         self.supported_translations = {
             "en_US": {
                 "firstNameMinError": "First name must be at least 3 characters long",
@@ -45,11 +42,10 @@ class CreateUserTest:
         }
 
     def generate_random_email(self, first_name, last_name):
-        """Generate a random email using first and last name."""
         return f"{first_name.lower()}.{last_name.lower()}@example.com"
 
     def create_user(self):
-        """Test case for creating a new user."""
+        # Test case for creating a new user.
         user_page = CreateUserPages(self.driver)
         expected_texts = self.supported_translations.get(self.language, {})
 
@@ -88,7 +84,6 @@ class CreateUserTest:
         # Test case for editing an existing user.
         user_page = CreateUserPages(self.driver)
         expected_texts = self.supported_translations.get(self.language, {})
-
         updated_last_name = self.faker.last_name()
         first_row = user_page.find_first_row1()
 
@@ -96,18 +91,15 @@ class CreateUserTest:
             print("ERROR: No row found!")
             return
         time.sleep(2)
-
         try:
             user_page.click_on_last_name_field(updated_last_name)
         except Exception as e:
             print(f"ERROR: Could not click last name field: {e}")
             return
         user_page.click_on_edit_button()
-
         # Validate confirmation messages
         # assert user_page.is_check_edit_cancel_alert_title(expected_texts["title"]), "Edit title mismatch"
-       # assert user_page.is_check_edit_cancel_alert_content(expected_texts["body"]), "Edit body mismatch"
-
+        # assert user_page.is_check_edit_cancel_alert_content(expected_texts["body"]), "Edit body mismatch"
         print(f"Edit Assertions passed for language: {self.language}")
         user_page.click_on_confirm_dialog_box()
         time.sleep(2)
@@ -126,24 +118,24 @@ class CreateUserTest:
 
 
     def test_delete_user(target_language):
-            driver = DriverManager.get_driver()
-            user_page = CreateUserPages(driver)
-            # Supported translations
-            translations = {
+        driver = DriverManager.get_driver()
+        user_page = CreateUserPages(driver)
+        # Supported translations
+        translations = {
                 "Español": {"deletealerttitle": "¿Estás seguro?", "deletebody": "Esta acción eliminará al usuario."},
                 "en_US": {"deletealerttitle": "Are you sure?", "deletebody": "This action will delete the user."}
-            }
-            expected_texts = translations.get(target_language, {})
-            user_page.clear_previous_notifications()
-            user_page.click_delete_button()
+        }
+        expected_texts = translations.get(target_language, {})
+        user_page.clear_previous_notifications()
+        user_page.click_delete_button()
 
-            # assert user_page.is_check_delete_alert_title(expected_texts["deletealerttitle"]), "Title mismatch."
-            # assert user_page.is_check_delete_alert_content(expected_texts["deletebody"]), "Body mismatch."
+        # assert user_page.is_check_delete_alert_title(expected_texts["deletealerttitle"]), "Title mismatch."
+        # assert user_page.is_check_delete_alert_content(expected_texts["deletebody"]), "Body mismatch."
 
-            print(f"Delete Assertions passed for: {target_language}")
-            user_page.confirm_deletion()
-            print("Snackbar Text:", user_page.get_notification_message2())
-            time.sleep(1)
+        print(f"Delete Assertions passed for: {target_language}")
+        user_page.confirm_deletion()
+        print("Snackbar Text:", user_page.get_notification_message2())
+        time.sleep(1)
 
 
     def test_filter_functionality(self):
@@ -155,30 +147,24 @@ class CreateUserTest:
         time.sleep(1)
         user_page.select_option_cl()
         time.sleep(1)
-        # Close the filter dropdown
         user_page.close_filter_dropdown()
         time.sleep(1)
-        # Clear filters
         user_page.click_on_clear_filters()
         time.sleep(1)
-        # Open the Status filter dropdown and select "Inactive"
         user_page.open_status_filter_dropdown()
         time.sleep(1)
         user_page.select_inactive_option()
         time.sleep(1)
-        # Clear filters again
         user_page.click_on_clear_filters()
         time.sleep(1)
 
     def test_search_user1(driver):
-        """Test to search for a user based on extracted UUID."""
+        # Test to search for a user based on extracted UUID.
         user_page = CreateUserPages(driver)
-
         try:
             first_row = user_page.get_first_row()  # Locate the first row in the table
             uuid = user_page.extract_uuid_from_row(first_row)  # Extract UUID from the first row
             user_name = user_page.get_user_name(first_row, uuid)  # Get user name
-
             print(f"Extracted userName: {user_name}")
             user_page.search_for_user_name(user_name)
             user_page.clear_search()
@@ -204,7 +190,7 @@ class CreateUserTest:
             if user_page.is_left_arrow_enabled():
                 print("Left pagination arrow is enabled.")
                 user_page.click_left_arrow()
-                time.sleep(2)  # Wait after clicking
+                time.sleep(2)
             else:
                 print("Left pagination arrow is disabled.")
         else:
@@ -214,7 +200,6 @@ class CreateUserTest:
     def test_already_exist_user(self):
         user_page = CreateUserPages(self.driver)
         faker = Faker()
-
         first_name = faker.first_name()
         last_name = faker.last_name()
         email = faker.email()
@@ -226,8 +211,6 @@ class CreateUserTest:
         user_page.click_submit_button()
 
         # assert "User created successfully" in user_page.get_success_message1()
-
-
         # Attempt to create duplicate user
         user_page.click_create_button()
         user_page.fill_user_details(first_name, last_name, email)
@@ -240,14 +223,3 @@ class CreateUserTest:
         user_page.click_cancel_button()
         user_page.click_yes_button()
 
-
-if __name__ == "__main__":
-    test = CreateUserTest("en_US")  # Set language
-    test.create_user()  # Run create user test
-    test.test_edit_user()  # Run edit user test
-    test.test_view_user()
-    test.test_delete_user()
-    test.test_filter_functionality()
-    test.test_search_user1()
-    # test.test_pagination()
-    # test_already_exist_user()

@@ -4,7 +4,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 class DriverManager:
     _driver = None
-    keep_browser_open = True  # ✅ Set to `True` to keep the browser open
+    keep_browser_open = True
 
     @classmethod
     def get_driver(cls):
