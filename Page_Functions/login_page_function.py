@@ -61,10 +61,12 @@ class TestLogin:
                 break
 
         time.sleep(3)
-        self.page.enter_email("rajni.1156@zenmonk.tech")
+        self.page.enter_email("zenmonk-developer-zenmonk@zenmonk.tech")
+        # zenmonk-developer-zenmonk@zenmonk.tech
         self.page.click_email_next()
         time.sleep(3)
-        self.page.enter_password("Rajnikar2022")
+        self.page.enter_password("a2fiEz5Sx2LzRiJ")
+        # a2fiEz5Sx2LzRiJ
         self.page.click_password_next()
         time.sleep(3)
 

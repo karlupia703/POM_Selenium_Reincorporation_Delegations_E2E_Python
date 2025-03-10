@@ -62,6 +62,7 @@ class CreateUserTest:
         # assert user_page.is_last_name_error_text(expected_texts["lastNameMinError"]), "Last name error mismatch"
         # assert user_page.is_email_error_text(expected_texts["emailRequiredError"]), "Email error mismatch"
         # assert user_page.is_headquarter_error_text(expected_texts["headquarterError"]), "Headquarter error mismatch"
+
         print(f"Assertions passed for language: {self.language}")
         user_page.enter_first_name(first_name)
         time.sleep(2)

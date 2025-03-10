@@ -26,11 +26,13 @@ class CreateUserPages:  # Class names should be in PascalCase
         # Using explicit waits for element location for create user
         self.create_btn = (By.CSS_SELECTOR, "[data-test-id=\"button-responsibleform-create\"]")
         self.inside_btn = (By.CSS_SELECTOR, "[data-test-id=\"custombtn-modal-responsibleform-create-submit\"]")
+
         # self.first_name_error = (By.CSS_SELECTOR, "[data-test-id=\"customtextfield-input-responsiblename-responsibleform-create\"]")
-        # self.first_name_error = (By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[1]/p")
+        # self.first_name_error = (By.XPATH, "/html/body/div[4]/div[3]/div[2]/div/form/div[1]/p")
         # self.last_name_error = (By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[2]/p")
         # self.email_error = (By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[3]/p")
         # self.headquarter_error = (By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[4]/div/p")
+
         self.firstname = (By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[1]/div/input")
         self.lastname = (By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[2]/div/input")
         self.emailaddress = (By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[3]/div/input")
@@ -96,23 +98,21 @@ class CreateUserPages:  # Class names should be in PascalCase
 
     # Method of Create user
     def click_on_create_button(self):
-        """Clicks the create button."""
+        # Clicks the create button.
         create_button = self.wait.until(EC.element_to_be_clickable(self.create_btn))
         create_button.click()
 
 
     def click_on_inside_create_button(self):
-        """Clicks the inside create button."""
+        # Clicks the inside create button.
         self.driver.find_element(*self.inside_btn).click()
 
 
     # Assertions Method to get the text of an element
     def get_element_text(self, locator):
         """Gets the text of an element.
-
         Args:
             locator (tuple): The locator of the element (e.g., (By.ID, "element_id")).
-
         Returns:
             str: The text of the element, or None if the element is not found.
         """
@@ -122,7 +122,6 @@ class CreateUserPages:  # Class names should be in PascalCase
         except TimeoutException:
             print(f"Element with locator {locator} not found within the specified time.")
             return None
-
 
     def enter_first_name(self, first_name):
         # Enters the first name in the input field.
@@ -149,6 +148,7 @@ class CreateUserPages:  # Class names should be in PascalCase
     def click_on_submit_btn(self):
         """Clicks the submit button."""
         self.driver.find_element(*self.submit).click()
+
     # def get_success_message(self):
     #     """Gets the success message text."""
     #     return self.driver.find_element(*self.success_message).text

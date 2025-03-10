@@ -36,7 +36,7 @@ class LoginPage:
             return language_element.text.strip()
         except:
             print("Language dropdown not found")
-            return None  # Or handle the error accordingly
+            return None
 
     def click_google_sign_in(self):
         self.driver.find_element(*self.google_sign_in_button).click()
