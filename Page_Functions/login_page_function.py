@@ -43,7 +43,6 @@ class TestLogin:
             time.sleep(2)
             self.page.select_language(target_language)
             time.sleep(2)
-
         self.verify_login_texts(expected_texts)
 
     def verify_login_texts(self, expected_texts):

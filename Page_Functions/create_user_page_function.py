@@ -47,7 +47,6 @@ class CreateUserTest:
         # Test case for creating a new user.
         user_page = CreateUserPages(self.driver)
         expected_texts = self.supported_translations.get(self.language, {})
-
         first_name = self.faker.first_name()
         last_name = self.faker.last_name()
         email = self.generate_random_email(first_name, last_name)
@@ -121,13 +120,12 @@ class CreateUserTest:
         user_page = CreateUserPages(driver)
         # Supported translations
         translations = {
-                "Español": {"deletealerttitle": "¿Estás seguro?", "deletebody": "Esta acción eliminará al usuario."},
-                "en_US": {"deletealerttitle": "Are you sure?", "deletebody": "This action will delete the user."}
+            "Español": {"deletealerttitle": "¿Estás seguro?", "deletebody": "Esta acción eliminará al usuario."},
+            "en_US": {"deletealerttitle": "Are you sure?", "deletebody": "This action will delete the user."}
         }
         expected_texts = translations.get(target_language, {})
         user_page.clear_previous_notifications()
         user_page.click_delete_button()
-
         # assert user_page.is_check_delete_alert_title(expected_texts["deletealerttitle"]), "Title mismatch."
         # assert user_page.is_check_delete_alert_content(expected_texts["deletebody"]), "Body mismatch."
 
@@ -161,7 +159,7 @@ class CreateUserTest:
         # Test to search for a user based on extracted UUID.
         user_page = CreateUserPages(driver)
         try:
-            first_row = user_page.get_first_row()  # Locate the first row in the table
+            first_row = user_page.get_first_row()
             uuid = user_page.extract_uuid_from_row(first_row)  # Extract UUID from the first row
             user_name = user_page.get_user_name(first_row, uuid)  # Get user name
             print(f"Extracted userName: {user_name}")

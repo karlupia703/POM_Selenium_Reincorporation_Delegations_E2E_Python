@@ -7,7 +7,6 @@ from selenium.webdriver.common.keys import Keys
 class LoginPage:
     def __init__(self, driver: WebDriver):
         self.driver = driver
-        # self.url = DriverManager.get_url("login")  # Centralized URL
         self.wait = WebDriverWait(driver, 10)
 
     # Selectors

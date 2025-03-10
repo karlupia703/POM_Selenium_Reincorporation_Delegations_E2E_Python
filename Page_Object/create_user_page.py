@@ -49,7 +49,6 @@ class CreateUserPages:  # Class names should be in PascalCase
         self.edit_cancel_alert_content = (By.CSS_SELECTOR, "[data-test-id=\"dialogBox-content-alertBox-responsiblitiesform-edit\"]")
         self.edit_snackbar_message = (By.XPATH, "(//div[@class='notistack-Snackbar go3963613292'])[1]")
 
-
         # Using element location for view user
         self.find_first_row_view_icon = (By.XPATH, "/html/body/div[1]/div/div[2]/div/div/div[2]/div[2]/div[1]/div/table/tbody/tr[1]/td[5]/div/button[1]")
         self.cross_icon_view = (By.CSS_SELECTOR, "[data-test-id=\"customdialog-canclebtn-view-viewresponsible-reinstatement-responsibles-table-list-page-reinstatement\"]")
@@ -73,10 +72,7 @@ class CreateUserPages:  # Class names should be in PascalCase
         self.inactive_option = (By.CSS_SELECTOR, "[data-test-id=\"filterchip-menu-item-false-filter-status-page-reinstatement\"]")
 
         # Using element location for search user
-        # Locators
         self.wait = WebDriverWait(driver, 10)
-        # self.table_body = (By.CSS_SELECTOR,"[data-test-id='tablebody-desktoptable-reinstatement-responsibles-table-list-page-reinstatement']")
-
         self.table_body = (By.CSS_SELECTOR, "data-test-id='[tablebodyrow-desktoptable-reinstatement-responsibles-table-list-page-reinstatement']")
         self.search_input = (By.XPATH, "/html/body/div[1]/div/div[2]/div/div/div[2]/div[1]/div[1]/div[2]/input")
         self.clear_search_icon = (By.CSS_SELECTOR, "[data-test-id='icon-clear-searchbar-page-reinstatement']")
@@ -96,20 +92,6 @@ class CreateUserPages:  # Class names should be in PascalCase
         self.cancel_button = (By.XPATH, "/html/body/div[5]/div[3]/div[3]/button[1]")
         self.yes_button = (By.XPATH, "/html/body/div[6]/div[3]/div/div[2]/button[2]")
         self.success_message = (By.XPATH, "(//div[@class='notistack-Snackbar go3963613292'])[1]")
-
-        # self.right_arrow = (By.CSS_SELECTOR, "[data-testid='KeyboardArrowRightIcon']")
-        # self.left_arrow = (By.CSS_SELECTOR, "[data-testid='KeyboardArrowLeftIcon']")
-        # self.create_button = (By.XPATH, "/html/body/div[1]/div/div[2]/div/div/div[1]/button")
-        # self.first_name_field = (By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[1]")
-        # self.last_name_field2 = (By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[2]/div/input")
-        # self.email_field = (By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[3]/div/input")
-        # self.headquarter_dropdown = (By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[4]/div/div/div/button")
-        # self.status_toggle = (By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/label/span[1]/span[1]")
-        # self.submit_button = (By.XPATH, "/html/body/div[5]/div[3]/div[3]/button[2]")
-        # self.cancel_button = (By.XPATH, "/html/body/div[5]/div[3]/div[3]/button[1]")
-        # self.yes_button = (By.XPATH, "/html/body/div[6]/div[3]/div/div[2]/button[2]")
-        # self.success_message1 = (By.XPATH, "(//div[@class='notistack-Snackbar go3963613292'])[1]")
-        # self.email_exist = (By.XPATH, "(//div[@class='notistack-Snackbar go3963613292'])[1]")
 
 
     # Method of Create user
@@ -142,41 +124,17 @@ class CreateUserPages:  # Class names should be in PascalCase
             return None
 
 
-    # Method to assert  text
-    # def is_first_name_error_text(self, expected_text):
-    #     """Checks if the first name error text matches the expected text."""
-    #     return self.get_element_text(self.first_name_error) == expected_text
-
-
-    # def is_last_name_error_text(self, expected_text):
-    #     """Checks if the last name error text matches the expected text."""
-    #     return self.get_element_text(self.last_name_error) == expected_text
-    #
-    #
-    # def is_email_error_text(self, expected_text):
-    #     """Checks if the email error text matches the expected text."""
-    #     return self.get_element_text(self.email_error) == expected_text
-    #
-    #
-    # def is_headquarter_error_text(self, expected_text):
-    #     """Checks if the headquarter error text matches the expected text."""
-    #     return self.get_element_text(self.headquarter_error) == expected_text
-    #
-    #
     def enter_first_name(self, first_name):
         # Enters the first name in the input field.
         self.driver.find_element(*self.firstname).send_keys(first_name)
-
 
     def enter_last_name(self, last_name):
         # Enters the last name in the input field.
         self.driver.find_element(*self.lastname).send_keys(last_name)
 
-
     def enter_email(self, email):
         # Enters the email in the input field.
         self.driver.find_element(*self.emailaddress).send_keys(email)
-
 
     def select_headquarter(self):
         # Selects a random headquarter from the dropdown.
@@ -191,11 +149,9 @@ class CreateUserPages:  # Class names should be in PascalCase
     def click_on_submit_btn(self):
         """Clicks the submit button."""
         self.driver.find_element(*self.submit).click()
-
     # def get_success_message(self):
     #     """Gets the success message text."""
     #     return self.driver.find_element(*self.success_message).text
-
 
 
     # Method of Edit User
@@ -242,18 +198,15 @@ class CreateUserPages:  # Class names should be in PascalCase
         return self.wait.until(EC.visibility_of_element_located(self.edit_snackbar_message)).text
 
 
-
      # Method of View User
     def click_on_view_icon1(self):
         # Clicks on the view icon.
         first_row1 = self.wait.until(EC.presence_of_element_located(self.find_first_row_view_icon))
         self.wait.until(EC.element_to_be_clickable(self.find_first_row_view_icon)).click()
 
-
     def click_on_view_cross_icon(self):
         # Clicks on the view cross icon.
         self.driver.find_element(*self.cross_icon_view).click()
-
 
 
     # Methods of Delete User
@@ -262,22 +215,17 @@ class CreateUserPages:  # Class names should be in PascalCase
         first_row_delete_button = self.driver.find_element(*self.delete_button)
         first_row_delete_button.click()
 
-
     def is_check_delete_alert_title(self, expected_text):
         return self.get_element_text(self.delete_alert_title) == expected_text
-
 
     def is_check_delete_alert_content(self, expected_text):
         return self.get_element_text(self.delete_alert_content) == expected_text
 
-
     def check_deleted_username(self):
         self.driver.find_element(*self.delete_username).click()
 
-
     def confirm_deletion(self):
         self.driver.find_element(*self.confirm_delete_button).click()
-
 
     def clear_previous_notifications(self):
         try:
@@ -285,45 +233,35 @@ class CreateUserPages:  # Class names should be in PascalCase
         except TimeoutException:
             print("No previous notifications to clear.")
 
-
     def get_notification_message2(self):
         return self.wait.until(EC.visibility_of_element_located(self.notification2)).text
-
 
 
     # Methods of filters
     def open_filter_dropdown(self):
         self.driver.find_element(*self.filter_dropdown).click()
 
-
     def select_option_ao(self):
         self.driver.find_element(*self.option_ao).click()
 
-
     def select_option_cl(self):
         self.driver.find_element(*self.option_cl).click()
-
 
     def close_filter_dropdown(self):
        background = self.driver.find_element(*self.close_dropdown)
        ActionChains(self.driver).move_to_element(background).click().perform()
 
-
     def click_on_clear_filters(self):
         self.driver.find_element(*self.clear_filters).click()
 
-
     def open_status_filter_dropdown(self):
          self.driver.find_element(*self.status_filter_dropdown).click()
-
 
     def select_inactive_option(self):
         self.driver.find_element(*self.inactive_option).click()
 
 
-
     # Methods of Search
-
     def get_first_row(self):
         """Waits for the table body and returns the first row element."""
         table_body_element = self.wait.until(EC.presence_of_element_located(self.table_body))
@@ -337,7 +275,6 @@ class CreateUserPages:  # Class names should be in PascalCase
 
         uuid_pattern = re.compile(r"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}")
         match = uuid_pattern.search(data_test_id)
-
         if match:
             return match.group()
         else:
@@ -350,7 +287,6 @@ class CreateUserPages:  # Class names should be in PascalCase
             f"[data-test-id='tablebodycell-{uuid}-responsiblename-desktoptable-reinstatement-responsibles-table-list-page-reinstatement']"
         )
         user_name = user_name_element.text.strip()
-
         if not user_name:
             raise ValueError("User name not found in the first row.")
 
@@ -367,8 +303,6 @@ class CreateUserPages:  # Class names should be in PascalCase
         clear_search = self.driver.find_element(*self.clear_search_icon)
         clear_search.click()
         time.sleep(2)  # Consider replacing with an explicit wait
-
-
 
 
     # Methods for pagination
@@ -403,7 +337,6 @@ class CreateUserPages:  # Class names should be in PascalCase
             self.click_pagination_arrow(self.left_arrow)
 
 
-
     # Methods for already user exist
     def click_create_button(self):
         self.wait.until(EC.element_to_be_clickable(self.create_button)).click()
@@ -412,17 +345,6 @@ class CreateUserPages:  # Class names should be in PascalCase
         self.wait.until(EC.visibility_of_element_located(self.first_name_field)).send_keys(first_name)
         self.wait.until(EC.visibility_of_element_located(self.last_name_field)).send_keys(last_name)
         self.wait.until(EC.visibility_of_element_located(self.email_field)).send_keys(email)
-
-
-
-
-    # def select_headquarter1(self):
-    #     self.driver.find_element(*self.headquarter_dropdown).click()
-    #     options = self.driver.find_elements(By.XPATH, "//div[@role='option']")
-    #     # //div[@role='option']
-    #     if options:
-    #         random.choice(options).click()
-
 
     def select_headquarter1(self):
         # Selects a random headquarter from the dropdown.
