@@ -1,6 +1,5 @@
 import os
 import time
-from selenium import webdriver
 from Page_Functions.login_page_function import TestLogin
 from Page_Functions.create_user_page_function import CreateUserTest
 
