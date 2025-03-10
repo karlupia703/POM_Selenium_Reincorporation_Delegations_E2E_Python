@@ -102,11 +102,9 @@ class CreateUserPages:  # Class names should be in PascalCase
         create_button = self.wait.until(EC.element_to_be_clickable(self.create_btn))
         create_button.click()
 
-
     def click_on_inside_create_button(self):
         # Clicks the inside create button.
         self.driver.find_element(*self.inside_btn).click()
-
 
     # Assertions Method to get the text of an element
     def get_element_text(self, locator):

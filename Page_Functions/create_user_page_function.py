@@ -220,4 +220,3 @@ class CreateUserTest:
         # Email already exists
         user_page.click_cancel_button()
         user_page.click_yes_button()
-
