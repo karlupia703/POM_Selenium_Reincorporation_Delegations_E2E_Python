@@ -2,10 +2,6 @@
 import time
 import pytest
 from selenium.common import NoSuchElementException
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium import webdriver
 from faker import Faker
 from Page_Object.create_user_page import CreateUserPages
 from Page_Functions.driver_manager import DriverManager

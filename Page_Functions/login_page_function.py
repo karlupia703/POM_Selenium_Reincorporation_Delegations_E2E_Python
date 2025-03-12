@@ -3,10 +3,12 @@ import pytest
 from selenium.webdriver.support.ui import WebDriverWait
 from Page_Functions.driver_manager import DriverManager
 from Page_Object.login_page import LoginPage
+from config.config import Config
 
 class TestLogin:
-    def __init__(self, base_url):
-        self.base_url = base_url
+    def __init__(self):
+        self.base_url = Config.BASE_URL
+        # self.base_url = base_url
 
     def setup_method(self):
         # Initialize WebDriver and navigate to the login page.
@@ -26,7 +28,7 @@ class TestLogin:
             }
         }
 
-    @pytest.mark.parametrize("target_language", ["Español"])
+    # @pytest.mark.parametrize("target_language", ["Español"])
     def test_login_user(self, target_language):
         # Perform login with the specified language.
         expected_texts = self.translations.get(target_language, {})
@@ -61,11 +63,11 @@ class TestLogin:
                 break
 
         time.sleep(3)
-        self.page.enter_email("zenmonk-developer-zenmonk@zenmonk.tech")
+        self.page.enter_email(Config.EMAIL)
         # zenmonk-developer-zenmonk@zenmonk.tech
         self.page.click_email_next()
         time.sleep(3)
-        self.page.enter_password("a2fiEz5Sx2LzRiJ")
+        self.page.enter_password(Config.PASSWORD)
         # a2fiEz5Sx2LzRiJ
         self.page.click_password_next()
         time.sleep(3)
