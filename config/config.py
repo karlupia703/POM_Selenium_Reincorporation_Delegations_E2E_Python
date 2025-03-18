@@ -4,8 +4,8 @@ class Config:
     language = "en_US"  # Options: "Español", "en_US"
 
     # Login Credentials
-    EMAIL = "rajni.1156@zenmonk.tech"
+    EMAIL = "zenmonk-developer-zenmonk@zenmonk.tech"
     # zenmonk-developer-zenmonk@zenmonk.tech
-    PASSWORD = "Rajnikar2022"
+    PASSWORD = "a2fiEz5Sx2LzRiJ"
     # a2fiEz5Sx2LzRiJ
 
