@@ -5,6 +5,8 @@ from selenium.common import NoSuchElementException
 from faker import Faker
 from Page_Object.create_user_page import CreateUserPages
 from Page_Functions.driver_manager import DriverManager
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 class CreateUserTest:
     def __init__(self, language):
@@ -53,7 +55,6 @@ class CreateUserTest:
         user_page.click_on_inside_create_button()
         time.sleep(1)
 
-        # Validate error messages in the selected language
         # assert user_page.is_first_name_error_text(expected_texts["firstNameMinError"]), "First name error mismatch"
         # assert user_page.is_last_name_error_text(expected_texts["lastNameMinError"]), "Last name error mismatch"
         # assert user_page.is_email_error_text(expected_texts["emailRequiredError"]), "Email error mismatch"

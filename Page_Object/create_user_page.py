@@ -11,6 +11,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 from faker import Faker
 import pytest
 
+
 class CreateUserPages:  # Class names should be in PascalCase
 
     def __init__(self, driver):
@@ -28,7 +29,8 @@ class CreateUserPages:  # Class names should be in PascalCase
         self.inside_btn = (By.CSS_SELECTOR, "[data-test-id=\"custombtn-modal-responsibleform-create-submit\"]")
 
         # self.first_name_error = (By.CSS_SELECTOR, "[data-test-id=\"customtextfield-input-responsiblename-responsibleform-create\"]")
-        # self.first_name_error = (By.XPATH, "/html/body/div[4]/div[3]/div[2]/div/form/div[1]/p")
+
+        self.first_name_error = (By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[1]/p")
         # self.last_name_error = (By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[2]/p")
         # self.email_error = (By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[3]/p")
         # self.headquarter_error = (By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[4]/div/p")
@@ -120,6 +122,11 @@ class CreateUserPages:  # Class names should be in PascalCase
         except TimeoutException:
             print(f"Element with locator {locator} not found within the specified time.")
             return None
+
+    # Method to assert  text
+    def is_first_name_error_text(self, expected_text):
+        """Checks if the first name error text matches the expected text."""
+        return self.get_element_text(self.first_name_error) == expected_text
 
     def enter_first_name(self, first_name):
         # Enters the first name in the input field.

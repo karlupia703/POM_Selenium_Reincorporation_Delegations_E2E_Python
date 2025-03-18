@@ -8,7 +8,6 @@ from config.config import Config
 class TestLogin:
     def __init__(self):
         self.base_url = Config.BASE_URL
-        # self.base_url = base_url
 
     def setup_method(self):
         # Initialize WebDriver and navigate to the login page.
@@ -29,10 +28,16 @@ class TestLogin:
         }
 
     # @pytest.mark.parametrize("target_language", ["Español"])
-    def test_login_user(self, target_language):
-        # Perform login with the specified language.
-        expected_texts = self.translations.get(target_language, {})
-        self.switch_language_if_needed(target_language, expected_texts)
+    # def test_login_user(self, target_language):
+    #     # Perform login with the specified language.
+    #     expected_texts = self.translations.get(target_language, {})
+    #     self.switch_language_if_needed(target_language, expected_texts)
+    #     self.page.click_google_sign_in()
+    #     self.handle_google_login()
+
+    def test_login_user(self):
+        expected_texts = self.translations.get(Config.language, {})
+        self.switch_language_if_needed(Config.language, expected_texts)
         self.page.click_google_sign_in()
         self.handle_google_login()
 
