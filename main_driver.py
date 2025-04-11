@@ -4,6 +4,7 @@ from Page_Functions.login_page_function import TestLogin
 from Page_Functions.create_user_page_function import CreateUserTest
 import Page_Functions.create_user_page_function
 from config.config import Config
+
 class MainDriverClass:
     driver = None
 
@@ -22,7 +23,6 @@ class MainDriverClass:
         login_test.setup_method()
         cls.driver = login_test.driver
         login_test.test_login_user()
-        # login_test.test_login_user(cls.language)
         print("User login successful.")
 
         if cls.driver is None:
@@ -30,7 +30,7 @@ class MainDriverClass:
             return
 
         # Initialize CreateUserTest
-        create_user_test = CreateUserTest(cls.driver)
+        create_user_test = CreateUserTest()
 
         # Run create user management tests
         create_user_test.create_user()
@@ -71,4 +71,5 @@ class MainDriverClass:
 if __name__ == "__main__":
     MainDriverClass.setup_language()
     MainDriverClass.run()
+
 

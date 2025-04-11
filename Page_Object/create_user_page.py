@@ -11,36 +11,26 @@ from selenium.webdriver.common.action_chains import ActionChains
 from faker import Faker
 import pytest
 
-
 class CreateUserPages:  # Class names should be in PascalCase
-
     def __init__(self, driver):
-        """
-        Initializes the CreateUserPage object.
-
-        Args:
-            driver: The Selenium WebDriver instance.
-        """
         self.driver = driver
         self.wait = WebDriverWait(driver, 20)  # Initialize WebDriverWait
 
         # Using explicit waits for element location for create user
         self.create_btn = (By.CSS_SELECTOR, "[data-test-id=\"button-responsibleform-create\"]")
         self.inside_btn = (By.CSS_SELECTOR, "[data-test-id=\"custombtn-modal-responsibleform-create-submit\"]")
-
-        # self.first_name_error = (By.CSS_SELECTOR, "[data-test-id=\"customtextfield-input-responsiblename-responsibleform-create\"]")
-
-        self.first_name_error = (By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[1]/p")
-        # self.last_name_error = (By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[2]/p")
-        # self.email_error = (By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[3]/p")
-        # self.headquarter_error = (By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[4]/div/p")
-
         self.firstname = (By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[1]/div/input")
         self.lastname = (By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[2]/div/input")
-        self.emailaddress = (By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[3]/div/input")
+        self.email_address = (By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[3]/div/input")
         self.headquarter = (By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[4]/div/div/div/button")
         self.dropdown_options = (By.XPATH, "//ul[@role='listbox']/li")
         self.submit = (By.CSS_SELECTOR, "[data-test-id=\"custombtn-modal-responsibleform-create-submit\"]")
+
+        # For Assertions
+        self.first_name_error = (By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[1]/p")
+        self.last_name_error = (By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[2]/p")
+        self.email_error = (By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[3]/p")
+        self.headquarter_error = (By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[4]/div/p")
         self.success_message_of_createUser = (By.CSS_SELECTOR, "#notistack-snackbar .MuiBox-root")
 
         # Using element location for edit user
@@ -86,16 +76,17 @@ class CreateUserPages:  # Class names should be in PascalCase
         self.left_arrow = (By.CSS_SELECTOR, "[data-testid='KeyboardArrowLeftIcon']")
 
         # Locators for Already exist user
-        self.create_button = (By.XPATH, "/html/body/div[1]/div/div[2]/div/div/div[1]/button")
-        self.first_name_field = (By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[1]/div/input")
-        self.last_name_field = (By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[2]/div/input")
-        self.email_field = (By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[3]/div/input")
-        self.headquarter_dropdown = (By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[4]/div/div/div/button")
-        self.status_toggle = (By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/label/span[1]/span[1]")
-        self.submit_button = (By.XPATH, "/html/body/div[5]/div[3]/div[3]/button[2]")
-        self.cancel_button = (By.XPATH, "/html/body/div[5]/div[3]/div[3]/button[1]")
-        self.yes_button = (By.XPATH, "/html/body/div[6]/div[3]/div/div[2]/button[2]")
-        self.success_message = (By.XPATH, "(//div[@class='notistack-Snackbar go3963613292'])[1]")
+        self.create_button = By.XPATH, "/html/body/div[1]/div/div[2]/div/div/div[1]/button"
+        self.first_name_field = By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[1]/div/input"
+        self.last_name_field = By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[2]/div/input"
+        self.email_field = By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[3]/div/input"
+        self.headquarter_dropdown = By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[4]/div/div/div/button"
+        self.status_toggle = By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/label/span[1]/span[1]"
+        self.submit_button = By.XPATH, "/html/body/div[5]/div[3]/div[3]/button[2]"
+        self.cancel_button = By.XPATH, "/html/body/div[5]/div[3]/div[3]/button[1]"
+        self.yes_button = By.XPATH, "/html/body/div[6]/div[3]/div/div[2]/button[2]"
+        self.success_message = By.CSS_SELECTOR, "div[id='notistack-snackbar'] div[class='MuiBox-root mui-0']"
+        self.email_already_exist_toster_msg = By.CSS_SELECTOR, "div[id='notistack-snackbar'] div[class='MuiBox-root mui-0']"
 
 
     # Method of Create user
@@ -110,12 +101,6 @@ class CreateUserPages:  # Class names should be in PascalCase
 
     # Assertions Method to get the text of an element
     def get_element_text(self, locator):
-        """Gets the text of an element.
-        Args:
-            locator (tuple): The locator of the element (e.g., (By.ID, "element_id")).
-        Returns:
-            str: The text of the element, or None if the element is not found.
-        """
         try:
             element = self.wait.until(EC.presence_of_element_located(locator))
             return element.text.strip()
@@ -128,6 +113,18 @@ class CreateUserPages:  # Class names should be in PascalCase
         """Checks if the first name error text matches the expected text."""
         return self.get_element_text(self.first_name_error) == expected_text
 
+    def is_last_name_error_text(self, expected_text):
+        """Checks if the first name error text matches the expected text."""
+        return self.get_element_text(self.last_name_error) == expected_text
+
+    def is_email_error_text(self, expected_text):
+        """Checks if the first name error text matches the expected text."""
+        return self.get_element_text(self.email_error) == expected_text
+
+    def is_headquarter_error_text(self, expected_text):
+        """Checks if the first name error text matches the expected text."""
+        return self.get_element_text(self.headquarter_error) == expected_text
+
     def enter_first_name(self, first_name):
         # Enters the first name in the input field.
         self.driver.find_element(*self.firstname).send_keys(first_name)
@@ -138,7 +135,7 @@ class CreateUserPages:  # Class names should be in PascalCase
 
     def enter_email(self, email):
         # Enters the email in the input field.
-        self.driver.find_element(*self.emailaddress).send_keys(email)
+        self.driver.find_element(*self.email_address).send_keys(email)
 
     def select_headquarter(self):
         # Selects a random headquarter from the dropdown.
@@ -153,11 +150,6 @@ class CreateUserPages:  # Class names should be in PascalCase
     def click_on_submit_btn(self):
         """Clicks the submit button."""
         self.driver.find_element(*self.submit).click()
-
-    # def get_success_message(self):
-    #     """Gets the success message text."""
-    #     return self.driver.find_element(*self.success_message).text
-
 
     # Method of Edit User
     def find_first_row1(self):
@@ -205,18 +197,16 @@ class CreateUserPages:  # Class names should be in PascalCase
 
      # Method of View User
     def click_on_view_icon1(self):
-        # Clicks on the view icon.
         first_row1 = self.wait.until(EC.presence_of_element_located(self.find_first_row_view_icon))
         self.wait.until(EC.element_to_be_clickable(self.find_first_row_view_icon)).click()
 
     def click_on_view_cross_icon(self):
-        # Clicks on the view cross icon.
         self.driver.find_element(*self.cross_icon_view).click()
 
 
     # Methods of Delete User
     def click_delete_button(self):
-        "Clicks the delete button on the first row."
+        """Clicks the delete button on the first row."""
         first_row_delete_button = self.driver.find_element(*self.delete_button)
         first_row_delete_button.click()
 
@@ -294,7 +284,6 @@ class CreateUserPages:  # Class names should be in PascalCase
         user_name = user_name_element.text.strip()
         if not user_name:
             raise ValueError("User name not found in the first row.")
-
         return user_name
 
     def search_for_user_name(self, user_name):
@@ -352,7 +341,6 @@ class CreateUserPages:  # Class names should be in PascalCase
         self.wait.until(EC.visibility_of_element_located(self.email_field)).send_keys(email)
 
     def select_headquarter1(self):
-        # Selects a random headquarter from the dropdown.
         self.driver.find_element(*self.headquarter).click()
         options = self.driver.find_elements(*self.dropdown_options)
         if options:
@@ -385,3 +373,5 @@ class CreateUserPages:  # Class names should be in PascalCase
             print("Success message not found within the timeout.")
             return ""
 
+    def get_email_already_exist_message(self):
+        return self.wait.until(EC.visibility_of_element_located(self.email_already_exist_toster_msg)).text

@@ -24,16 +24,18 @@ class TestLogin:
                 "title": "Responsables de Reincorporación",
                 "button": "Accede con Google",
                 "accessWithGoogle": "Acceso a delegaciones de reincorporación"
+            },
+            "pt_BR": {
+                "title": "Delegações de Reincorporação",
+                "button": "Entrar com o Google",
+                "accessWithGoogle": "Acesso às delegações de reincorporação"
+            },
+            "it_IT": {
+                "title": "Delegazioni di Reincorporazione",
+                "button": "Accedi con Google",
+                "accessWithGoogle": "Accesso alle deleghe di reincorporazione"
             }
         }
-
-    # @pytest.mark.parametrize("target_language", ["Español"])
-    # def test_login_user(self, target_language):
-    #     # Perform login with the specified language.
-    #     expected_texts = self.translations.get(target_language, {})
-    #     self.switch_language_if_needed(target_language, expected_texts)
-    #     self.page.click_google_sign_in()
-    #     self.handle_google_login()
 
     def test_login_user(self):
         expected_texts = self.translations.get(Config.language, {})
@@ -69,18 +71,10 @@ class TestLogin:
 
         time.sleep(3)
         self.page.enter_email(Config.EMAIL)
-        # zenmonk-developer-zenmonk@zenmonk.tech
         self.page.click_email_next()
         time.sleep(3)
         self.page.enter_password(Config.PASSWORD)
-        # a2fiEz5Sx2LzRiJ
         self.page.click_password_next()
         time.sleep(3)
-
         self.driver.switch_to.window(original_window)
         time.sleep(3)
-
-
-
-
-
