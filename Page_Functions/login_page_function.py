@@ -4,6 +4,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from Page_Functions.driver_manager import DriverManager
 from Page_Object.login_page import LoginPage
 from config.config import Config
+from test_Data.translations import Translations
 
 class TestLogin:
     def __init__(self):
@@ -14,31 +15,9 @@ class TestLogin:
         self.driver = DriverManager.get_driver()
         self.driver.get(self.base_url)
         self.page = LoginPage(self.driver)
-        self.translations = {
-            "en_US": {
-                "title": "Reincorporation Delegations",
-                "button": "Sign in with Google",
-                "accessWithGoogle": "Access to reincorporation delegations"
-            },
-            "Español": {
-                "title": "Responsables de Reincorporación",
-                "button": "Accede con Google",
-                "accessWithGoogle": "Acceso a delegaciones de reincorporación"
-            },
-            "pt_BR": {
-                "title": "Delegações de Reincorporação",
-                "button": "Entrar com o Google",
-                "accessWithGoogle": "Acesso às delegações de reincorporação"
-            },
-            "it_IT": {
-                "title": "Delegazioni di Reincorporazione",
-                "button": "Accedi con Google",
-                "accessWithGoogle": "Accesso alle deleghe di reincorporazione"
-            }
-        }
 
     def test_login_user(self):
-        expected_texts = self.translations.get(Config.language, {})
+        expected_texts = Translations.get_translation(Config.language)
         self.switch_language_if_needed(Config.language, expected_texts)
         self.page.click_google_sign_in()
         self.handle_google_login()
@@ -55,7 +34,6 @@ class TestLogin:
         self.verify_login_texts(expected_texts)
 
     def verify_login_texts(self, expected_texts):
-        # Verify that login page texts match the expected values.
         assert self.page.is_title_correct(expected_texts["title"]), "Title text mismatch"
         assert self.page.is_google_button_correct(expected_texts["button"]), "Google button text mismatch"
         assert self.page.is_access_with_google_text_correct(expected_texts["accessWithGoogle"]), "Access with Google text mismatch"

@@ -2,7 +2,6 @@ import os
 import time
 from Page_Functions.login_page_function import TestLogin
 from Page_Functions.create_user_page_function import CreateUserTest
-import Page_Functions.create_user_page_function
 from config.config import Config
 
 class MainDriverClass:

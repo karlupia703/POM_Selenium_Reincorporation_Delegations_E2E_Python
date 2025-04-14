@@ -8,10 +8,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException, TimeoutException, StaleElementReferenceException
 from selenium.webdriver.common.action_chains import ActionChains
-from faker import Faker
-import pytest
 
-class CreateUserPages:  # Class names should be in PascalCase
+class CreateUserPages:
     def __init__(self, driver):
         self.driver = driver
         self.wait = WebDriverWait(driver, 20)  # Initialize WebDriverWait
@@ -51,7 +49,9 @@ class CreateUserPages:  # Class names should be in PascalCase
         self.delete_button = (By.CSS_SELECTOR, "[data-test-id*='-deleteicon-desktoptable-']")
         self.confirm_delete_button = (By.CSS_SELECTOR, "[data-test-id='custombtn-dialogBox-submit-alertbox-delete-reinstatement-responsibles-table-list-page-reinstatement']")
         self.notification_message = (By.CSS_SELECTOR, "#notistack-snackbar .MuiBox-root")
-        self.delete_alert_title = (By.CSS_SELECTOR, "[data-test-id=\"dialogBox-title-alertbox-delete-reinstatement-responsibles-table-list-page-reinstatement\"]")
+        # self.delete_alert_title = (By.CSS_SELECTOR, "[data-test-id=\"dialogBox-title-alertbox-delete-reinstatement-responsibles-table-list-page-reinstatement\"]")
+
+        self.delete_alert_title = By.CSS_SELECTOR,"[data-test-id='dialogBox-title-alertbox-delete-reinstatement-responsibles-table-list-page-reinstatement']"
         self.delete_alert_content = (By.CSS_SELECTOR, "[data-test-id=\"alertbox-deletetext-reinstatement-responsibles-table-list-page-reinstatement\"]")
         self.delete_username = (By.CSS_SELECTOR, "[data-test-id=\"alertbox-deleteusername-reinstatement-responsibles-table-list-page-reinstatement\"]")
         self.notification2 = (By.CSS_SELECTOR, "#notistack-snackbar > .MuiBox-root")
@@ -91,12 +91,10 @@ class CreateUserPages:  # Class names should be in PascalCase
 
     # Method of Create user
     def click_on_create_button(self):
-        # Clicks the create button.
         create_button = self.wait.until(EC.element_to_be_clickable(self.create_btn))
         create_button.click()
 
     def click_on_inside_create_button(self):
-        # Clicks the inside create button.
         self.driver.find_element(*self.inside_btn).click()
 
     # Assertions Method to get the text of an element
@@ -296,7 +294,7 @@ class CreateUserPages:  # Class names should be in PascalCase
         """Clears the search input field."""
         clear_search = self.driver.find_element(*self.clear_search_icon)
         clear_search.click()
-        time.sleep(2)  # Consider replacing with an explicit wait
+        time.sleep(2)
 
 
     # Methods for pagination

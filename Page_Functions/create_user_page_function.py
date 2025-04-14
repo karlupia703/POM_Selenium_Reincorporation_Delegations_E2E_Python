@@ -2,63 +2,16 @@ import time
 import pytest
 from selenium.common import NoSuchElementException
 from faker import Faker
-from selenium.webdriver.support.expected_conditions import none_of
-
 from Page_Object.create_user_page import CreateUserPages
 from Page_Functions.driver_manager import DriverManager
 from config.config import Config
-
+from test_Data.translations import Translations
 
 class CreateUserTest:
-    # def __init__(self, language):
     def __init__(self):
         self.driver = DriverManager.get_driver()
         self.faker = Faker()
         self.language = Config.language
-
-        # Supported translations for different languages
-        self.supported_translations = {
-            "en_US": {
-                "firstNameMinError": "First name must be at least 3 characters long",
-                "lastNameMinError": "Last name must be at least 3 characters long",
-                "emailRequiredError": "Email is required",
-                "headquarterError": "Please select a headquarter",
-                "title": "Edit Reinstatement Responsible",
-                "body": "Are you sure you want to save the changes?",
-                "deletealerttitle": "Delete Reinstatement Responsible",
-                "deletebody": "Are you sure to delete the user"
-            },
-            "Español": {
-                "firstNameMinError": "El nombre debe tener al menos 3 caracteres",
-                "lastNameMinError": "El apellido debe tener al menos 3 caracteres",
-                "emailRequiredError": "El correo electrónico es requerido",
-                "headquarterError": "Por favor seleccione una sede",
-                "title": "Editar Responsable de Reincorporación",
-                "body": "¿Está seguro de guardar los cambios?",
-                "deletealerttitle": "Eliminar Responsable de Reincorporación",
-                "deletebody": "¿Está seguro de eliminar al usuario"
-            },
-            "pt_BR": {
-                "firstNameMinError": "O nome deve ter pelo menos 3 caracteres",
-                "lastNameMinError": "O sobrenome deve ter pelo menos 3 caracteres",
-                "emailRequiredError": "O email é obrigatório",
-                "headquarterError": "Por favor, selecione uma sede",
-                "title": "Editar o Responsável pela Reincorporação",
-                "body": "Tem certeza de que deseja salvar as alterações?",
-                "deletealerttitle": "Excluir o Responsável pela Reincorporação",
-                "deletebody": "Tem certeza de que deseja excluir o usuário"
-            },
-            "it_IT": {
-                "firstNameMinError": "Il nome deve essere di almeno 3 caratteri",
-                "lastNameMinError": "Il cognome deve essere di almeno 3 caratteri",
-                "emailRequiredError": "L'email è obbligatoria",
-                "headquarterError": "Seleziona una sede",
-                "title": "Modifica il Responsabile della Reincorporazione",
-                "body": "Sei sicuro di voler salvare le modifiche?",
-                "deletealerttitle": "Elimina il Responsabile della Reincorporazione",
-                "deletebody": "Sei sicuro di voler eliminare l'utente"
-            }
-        }
 
     def generate_random_email(self, first_name, last_name):
         return f"{first_name.lower()}.{last_name.lower()}@example.com"
@@ -66,7 +19,7 @@ class CreateUserTest:
     def create_user(self):
         # Test case for creating a new user.
         user_page = CreateUserPages(self.driver)
-        expected_texts = self.supported_translations.get(self.language, {})
+        expected_texts = Translations.get_translation(Config.language)
         first_name = self.faker.first_name()
         last_name = self.faker.last_name()
         email = self.generate_random_email(first_name, last_name)
@@ -99,7 +52,7 @@ class CreateUserTest:
     def test_edit_user(self):
         # Test case for editing an existing user.
         user_page = CreateUserPages(self.driver)
-        expected_texts = self.supported_translations.get(self.language, {})
+        expected_texts = Translations.get_translation(Config.language)
         updated_last_name = self.faker.last_name()
         first_row = user_page.find_first_row1()
         if not first_row:
@@ -114,7 +67,7 @@ class CreateUserTest:
         user_page.click_on_edit_button()
 
         # Validate confirmation messages
-        assert user_page.is_check_edit_cancel_alert_title(expected_texts["title"]), "Edit title mismatch"
+        assert user_page.is_check_edit_cancel_alert_title(expected_texts["EditTitle"]), "Edit title mismatch"
         assert user_page.is_check_edit_cancel_alert_content(expected_texts["body"]), "Edit body mismatch"
 
         user_page.click_on_confirm_dialog_box()
@@ -125,7 +78,6 @@ class CreateUserTest:
 
     def test_view_user(self):
         user_page = CreateUserPages(self.driver)
-        # expected_texts = self.supported_translations.get(self.language, {})
         user_page.click_on_view_icon1()
         time.sleep(3)
         user_page.click_on_view_cross_icon()
@@ -134,12 +86,12 @@ class CreateUserTest:
 
     def test_delete_user(self):
         driver = DriverManager.get_driver()
-        expected_texts = self.supported_translations.get(self.language, {})
+        expected_texts = Translations.get_translation(Config.language)
         user_page = CreateUserPages(driver)
         user_page.clear_previous_notifications()
         user_page.click_delete_button()
-        assert user_page.is_check_delete_alert_title(expected_texts["deletealerttitle"]), "Title mismatch."
-        assert user_page.is_check_delete_alert_content(expected_texts["deletebody"]), "Body mismatch."
+        assert user_page.is_check_delete_alert_title(expected_texts["deleteAlertTitle"]), "Title mismatch."
+        assert user_page.is_check_delete_alert_content(expected_texts["deleteBody"]), "Body mismatch."
         user_page.confirm_deletion()
         success_message = user_page.get_notification_message2()
         print(f"Snackbar Text: {success_message}")
@@ -163,6 +115,7 @@ class CreateUserTest:
         time.sleep(1)
         user_page.click_on_clear_filters()
         time.sleep(1)
+
 
     def test_search_user1(driver):
         # Test to search for a user based on extracted UUID.
