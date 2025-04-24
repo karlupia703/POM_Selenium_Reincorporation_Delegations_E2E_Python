@@ -49,8 +49,6 @@ class CreateUserPages:
         self.delete_button = (By.CSS_SELECTOR, "[data-test-id*='-deleteicon-desktoptable-']")
         self.confirm_delete_button = (By.CSS_SELECTOR, "[data-test-id='custombtn-dialogBox-submit-alertbox-delete-reinstatement-responsibles-table-list-page-reinstatement']")
         self.notification_message = (By.CSS_SELECTOR, "#notistack-snackbar .MuiBox-root")
-        # self.delete_alert_title = (By.CSS_SELECTOR, "[data-test-id=\"dialogBox-title-alertbox-delete-reinstatement-responsibles-table-list-page-reinstatement\"]")
-
         self.delete_alert_title = By.CSS_SELECTOR,"[data-test-id='dialogBox-title-alertbox-delete-reinstatement-responsibles-table-list-page-reinstatement']"
         self.delete_alert_content = (By.CSS_SELECTOR, "[data-test-id=\"alertbox-deletetext-reinstatement-responsibles-table-list-page-reinstatement\"]")
         self.delete_username = (By.CSS_SELECTOR, "[data-test-id=\"alertbox-deleteusername-reinstatement-responsibles-table-list-page-reinstatement\"]")

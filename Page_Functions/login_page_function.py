@@ -11,7 +11,6 @@ class TestLogin:
         self.base_url = Config.BASE_URL
 
     def setup_method(self):
-        # Initialize WebDriver and navigate to the login page.
         self.driver = DriverManager.get_driver()
         self.driver.get(self.base_url)
         self.page = LoginPage(self.driver)
