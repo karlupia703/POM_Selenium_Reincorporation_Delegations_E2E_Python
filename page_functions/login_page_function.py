@@ -1,10 +1,10 @@
 import time
 import pytest
 from selenium.webdriver.support.ui import WebDriverWait
-from Page_Functions.driver_manager import DriverManager
-from Page_Object.login_page import LoginPage
+from page_functions.driver_manager import DriverManager
+from page_object.login_page import LoginPage
 from config.config import Config
-from test_Data.translations import Translations
+from test_data.translations import Translations
 
 class TestLogin:
     def __init__(self):

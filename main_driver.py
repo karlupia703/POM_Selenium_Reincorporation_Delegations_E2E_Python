@@ -1,8 +1,8 @@
 import os
 import time
 import pytest
-from Page_Functions.login_page_function import TestLogin
-from Page_Functions.create_user_page_function import CreateUserTest
+from page_functions.login_page_function import TestLogin
+from page_functions.create_user_page_function import CreateUserTest
 from config.config import Config
 
 def test_setup_language():

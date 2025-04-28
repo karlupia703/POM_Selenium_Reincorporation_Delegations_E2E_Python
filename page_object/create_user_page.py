@@ -110,15 +110,15 @@ class CreateUserPages:
         return self.get_element_text(self.first_name_error) == expected_text
 
     def is_last_name_error_text(self, expected_text):
-        """Checks if the first name error text matches the expected text."""
+        """Checks if the last name error text matches the expected text."""
         return self.get_element_text(self.last_name_error) == expected_text
 
     def is_email_error_text(self, expected_text):
-        """Checks if the first name error text matches the expected text."""
+        """Checks if the email field error text matches the expected text."""
         return self.get_element_text(self.email_error) == expected_text
 
     def is_headquarter_error_text(self, expected_text):
-        """Checks if the first name error text matches the expected text."""
+        """Checks if the headquarter error text matches the expected text."""
         return self.get_element_text(self.headquarter_error) == expected_text
 
     def enter_first_name(self, first_name):

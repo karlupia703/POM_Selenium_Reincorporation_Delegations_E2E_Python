@@ -2,10 +2,10 @@ import time
 import pytest
 from selenium.common import NoSuchElementException
 from faker import Faker
-from Page_Object.create_user_page import CreateUserPages
-from Page_Functions.driver_manager import DriverManager
+from page_object.create_user_page import CreateUserPages
+from page_functions.driver_manager import DriverManager
 from config.config import Config
-from test_Data.translations import Translations
+from test_data.translations import Translations
 
 class CreateUserTest:
     def __init__(self):
