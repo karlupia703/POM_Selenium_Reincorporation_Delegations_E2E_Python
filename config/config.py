@@ -1,7 +1,7 @@
 
 class Config:
     BASE_URL = "http://localhost:3000/"
-    language = "en_US"  # Options: "Español", "en_US", "it_IT", "pt_BR"
+    language = "Español"  # Options: "Español", "en_US", "it_IT", "pt_BR"
 
     # Login Credentials
     EMAIL = "zenmonk-developer-zenmonk@zenmonk.tech"
