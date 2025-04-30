@@ -8,7 +8,7 @@ from test_data.translations import Translations
 
 class TestLogin:
     def __init__(self):
-        self.base_url = Config.BASE_URL
+        self.base_url = Config.base_url
 
     def setup_method(self):
         self.driver = DriverManager.get_driver()
@@ -47,10 +47,10 @@ class TestLogin:
                 break
 
         time.sleep(3)
-        self.page.enter_email(Config.EMAIL)
+        self.page.enter_email(Config.email)
         self.page.click_email_next()
         time.sleep(3)
-        self.page.enter_password(Config.PASSWORD)
+        self.page.enter_password(Config.password)
         self.page.click_password_next()
         time.sleep(3)
         self.driver.switch_to.window(original_window)

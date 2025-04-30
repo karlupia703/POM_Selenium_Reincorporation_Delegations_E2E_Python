@@ -24,13 +24,12 @@ def reinstatement_page():
 # Run create user management tests
 def test_create_user(reinstatement_page):
         reinstatement_page.create_user()
-        print("user create successfully")
+        time.sleep(1)
 
 # Run edit user test
 def test_edit_user(reinstatement_page):
         reinstatement_page.test_edit_user()
         time.sleep(2)
-        print("Edit information of user successfully")
 
 # Run View user test
 def test_view_user(reinstatement_page):
@@ -42,7 +41,12 @@ def test_view_user(reinstatement_page):
 def test_delete_user(reinstatement_page):
         reinstatement_page.test_delete_user()
         time.sleep(2)
-        print("User deleted successfully")
+
+# Run search user
+def test_search_user_functionality(reinstatement_page):
+        reinstatement_page.test_search_user()
+        time.sleep(2)
+        print("User search successfully")
 
 # Run filter user test
 def test_filter_functionality(reinstatement_page):
@@ -60,4 +64,3 @@ def test_pagination(reinstatement_page):
 def test_already_exist_user(reinstatement_page):
         reinstatement_page.test_already_exist_user()
         time.sleep(2)
-        print("User already exist")

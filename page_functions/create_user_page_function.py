@@ -2,13 +2,18 @@ import time
 import pytest
 from selenium.common import NoSuchElementException
 from faker import Faker
+from webdriver_manager.core import driver
+
 from page_object.create_user_page import CreateUserPages
 from page_functions.driver_manager import DriverManager
+from page_object.create_user_page import CreateUserPages
+
 from config.config import Config
 from test_data.translations import Translations
 
 class CreateUserTest:
     def __init__(self):
+        self.driver = driver
         self.driver = DriverManager.get_driver()
         self.faker = Faker()
         self.language = Config.language
@@ -97,6 +102,23 @@ class CreateUserTest:
         print(f"Snackbar Text: {success_message}")
 
 
+    def test_search_user(self):
+        user_page = CreateUserPages(self.driver)
+        try:
+            first_row = user_page.get_first_row()
+            uuid = user_page.extract_uuid_from_row(first_row)
+            user_name = user_page.get_user_name(first_row, uuid)
+            print(f"Extracted userName: {user_name}")
+            user_page.search_for_user_name(user_name)
+            time.sleep(1)
+            user_page.clear_search()
+            time.sleep(1)
+            user_page.search_with_random_text_and_check_no_results()
+            time.sleep(1)
+        except NoSuchElementException as e:
+            print(f"Error: {e}")
+
+
     def test_filter_functionality(self):
         user_page = CreateUserPages(self.driver)
         user_page.open_filter_dropdown()
@@ -111,24 +133,8 @@ class CreateUserTest:
         time.sleep(1)
         user_page.open_status_filter_dropdown()
         time.sleep(1)
-        user_page.select_inactive_option()
-        time.sleep(1)
         user_page.click_on_clear_filters()
         time.sleep(1)
-
-
-    def test_search_user1(driver):
-        # Test to search for a user based on extracted UUID.
-        user_page = CreateUserPages(driver)
-        try:
-            first_row = user_page.get_first_row()
-            uuid = user_page.extract_uuid_from_row(first_row)
-            user_name = user_page.get_user_name(first_row, uuid)
-            print(f"Extracted userName: {user_name}")
-            user_page.search_for_user_name(user_name)
-            user_page.clear_search()
-        except NoSuchElementException as e:
-            print(f"Error: {e}")
 
 
     def test_pagination(self):

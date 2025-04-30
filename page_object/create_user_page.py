@@ -1,3 +1,4 @@
+import string
 import time
 import random
 import re
@@ -49,24 +50,25 @@ class CreateUserPages:
         self.delete_button = (By.CSS_SELECTOR, "[data-test-id*='-deleteicon-desktoptable-']")
         self.confirm_delete_button = (By.CSS_SELECTOR, "[data-test-id='custombtn-dialogBox-submit-alertbox-delete-reinstatement-responsibles-table-list-page-reinstatement']")
         self.notification_message = (By.CSS_SELECTOR, "#notistack-snackbar .MuiBox-root")
-        self.delete_alert_title = By.CSS_SELECTOR,"[data-test-id='dialogBox-title-alertbox-delete-reinstatement-responsibles-table-list-page-reinstatement']"
+        self.delete_alert_title = By.XPATH, "/html/body/div[5]/div[3]/div/h2"
         self.delete_alert_content = (By.CSS_SELECTOR, "[data-test-id=\"alertbox-deletetext-reinstatement-responsibles-table-list-page-reinstatement\"]")
         self.delete_username = (By.CSS_SELECTOR, "[data-test-id=\"alertbox-deleteusername-reinstatement-responsibles-table-list-page-reinstatement\"]")
         self.notification2 = (By.CSS_SELECTOR, "#notistack-snackbar > .MuiBox-root")
 
         # Using element location for test filter
-        self.filter_dropdown = (By.CSS_SELECTOR, "[data-test-id='chip-label-autocompletefilter-destop-filter-headquarter-page-reinstatement']")
+        self.headquarter_dropdown_filter = (By.CSS_SELECTOR, "[data-test-id='chip-label-autocompletefilter-destop-filter-headquarter-page-reinstatement']")
+        self.headquarter_list = By.XPATH, "/html/body/div[5]/div[3]/div[2]/ul/li"
         self.option_ao = (By.CSS_SELECTOR, "[data-test-id='list-item-AO-autocompletefilter-destop-filter-headquarter-page-reinstatement']")
         self.option_cl = (By.CSS_SELECTOR, "[data-test-id='list-item-CL-autocompletefilter-destop-filter-headquarter-page-reinstatement']")
         self.close_dropdown = (By.TAG_NAME, "body")
         self.clear_filters = (By.XPATH, "/html/body/div[1]/div/div[2]/div/div/div[2]/div[1]/div[4]")
-        self.status_filter_dropdown = (By.CSS_SELECTOR, "[data-test-id='filterchip-arrowdown-icon-filter-status-page-reinstatement']")
-        self.inactive_option = (By.CSS_SELECTOR, "[data-test-id=\"filterchip-menu-item-false-filter-status-page-reinstatement\"]")
+        self.status_filter = By.CSS_SELECTOR, "[data-test-id='label-render-value-filter-status-page-reinstatement']"
+        self.status_filter_dropdown = By.XPATH, "/html/body/div[5]/div[3]/ul/li"
 
         # Using element location for search user
         self.wait = WebDriverWait(driver, 10)
-        self.table_body = (By.CSS_SELECTOR, "data-test-id='[tablebodyrow-desktoptable-reinstatement-responsibles-table-list-page-reinstatement']")
-        self.search_input = (By.XPATH, "/html/body/div[1]/div/div[2]/div/div/div[2]/div[1]/div[1]/div[2]/input")
+        self.table_body = By.XPATH, "/html/body/div[1]/div/div[2]/div/div/div[2]/div[2]/div[1]/div/table/tbody"
+        self.search_input = By.XPATH, "//input[@placeholder='Search responsible' or @placeholder='Buscar Responsable' or @placeholder='Cerca responsabile' or @placeholder='Pesquisar responsável']"
         self.clear_search_icon = (By.CSS_SELECTOR, "[data-test-id='icon-clear-searchbar-page-reinstatement']")
 
         # Locators for pagination
@@ -163,7 +165,6 @@ class CreateUserPages:
             EC.element_to_be_clickable(self.last_name_field)
         )
         last_name_field.click()
-
         # Clear the field properly
         last_name_field.send_keys(Keys.CONTROL, "a")  # Select all text
         last_name_field.send_keys(Keys.DELETE)
@@ -228,9 +229,69 @@ class CreateUserPages:
         return self.wait.until(EC.visibility_of_element_located(self.notification2)).text
 
 
+    # Methods of Search
+    def get_first_row(self):
+        """Waits for the table body and returns the first row element."""
+        table_body_element = self.wait.until(EC.presence_of_element_located(self.table_body))
+        return table_body_element.find_element(By.CSS_SELECTOR, ":first-child")
+
+    def extract_uuid_from_row(self, first_row):
+        """Extracts UUID from the first row's 'data-test-id' attribute."""
+        data_test_id = first_row.get_attribute("data-test-id")
+        if data_test_id is None:
+            raise ValueError("No data-test-id attribute found for the first row.")
+        uuid_pattern = re.compile(r"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}")
+        match = uuid_pattern.search(data_test_id)
+        if match:
+            return match.group()
+        else:
+            raise ValueError(f"No valid UUID found in data-test-id: {data_test_id}")
+
+    def get_user_name(self, first_row, uuid):
+        """Retrieves the username from the first row using the extracted UUID."""
+        user_name_element = first_row.find_element(
+            By.CSS_SELECTOR,
+            f"[data-test-id='tablebodycell-{uuid}-responsiblename-text-desktoptable-reinstatement-responsibles-table-list-page-reinstatement']"
+        )
+        user_name = user_name_element.text.strip()
+        if not user_name:
+            raise ValueError("User name not found in the first row.")
+        return user_name
+
+    def search_for_user_name(self, user_name):
+        """Enters the username in the search input field."""
+        search_bar = WebDriverWait(self.driver, 10).until(
+            EC.element_to_be_clickable(self.search_input)
+        )
+        search_bar.send_keys(user_name)
+
+    def clear_search(self):
+        clear_search = self.driver.find_element(*self.clear_search_icon)
+        clear_search.click()
+
+    def search_with_random_text_and_check_no_results(self):
+        # Generate random search text
+        random_text = ''.join(random.choices(string.ascii_letters + string.digits, k=7))
+        search_field_element = self.driver.find_element(*self.search_input)
+        search_field_element.click()
+        search_field_element.send_keys(random_text)
+        time.sleep(2)
+        # Check for 'No results found' message
+        try:
+            no_result_element = self.driver.find_element(By.CSS_SELECTOR, "[data-test-id='nocontentheading-tablenocontent-desktoptable-reinstatement-responsibles-table-list-page-reinstatement']")
+            if no_result_element.is_displayed():
+                print(f"Message displayed: 'No results found' for search '{random_text}'")
+            else:
+                print("No results found' message is not visible.")
+        except:
+            print("No results found' element not found. Maybe results are unexpectedly present.")
+
+        self.driver.find_element(*self.clear_search_icon).click()
+
+
     # Methods of filters
     def open_filter_dropdown(self):
-        self.driver.find_element(*self.filter_dropdown).click()
+        self.driver.find_element(*self.headquarter_dropdown_filter).click()
 
     def select_option_ao(self):
         self.driver.find_element(*self.option_ao).click()
@@ -246,53 +307,16 @@ class CreateUserPages:
         self.driver.find_element(*self.clear_filters).click()
 
     def open_status_filter_dropdown(self):
-         self.driver.find_element(*self.status_filter_dropdown).click()
-
-    def select_inactive_option(self):
-        self.driver.find_element(*self.inactive_option).click()
-
-
-    # Methods of Search
-    def get_first_row(self):
-        """Waits for the table body and returns the first row element."""
-        table_body_element = self.wait.until(EC.presence_of_element_located(self.table_body))
-        return table_body_element.find_element(By.CSS_SELECTOR, ":first-child")
-
-    def extract_uuid_from_row(self, first_row):
-        """Extracts UUID from the first row's 'data-test-id' attribute."""
-        data_test_id = first_row.get_attribute("data-test-id")
-        if data_test_id is None:
-            raise ValueError("No data-test-id attribute found for the first row.")
-
-        uuid_pattern = re.compile(r"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}")
-        match = uuid_pattern.search(data_test_id)
-        if match:
-            return match.group()
+        self.driver.find_element(*self.status_filter).click()
+        options = self.driver.find_elements(*self.status_filter_dropdown)
+        if options:
+            random_option = random.choice(options)
+            random_option.click()
         else:
-            raise ValueError(f"No valid UUID found in data-test-id: {data_test_id}")
+            print("No options available in the dropdown.")
+            time.sleep(3)
 
-    def get_user_name(self, first_row, uuid):
-        """Retrieves the username from the first row using the extracted UUID."""
-        user_name_element = first_row.find_element(
-            By.CSS_SELECTOR,
-            f"[data-test-id='tablebodycell-{uuid}-responsiblename-desktoptable-reinstatement-responsibles-table-list-page-reinstatement']"
-        )
-        user_name = user_name_element.text.strip()
-        if not user_name:
-            raise ValueError("User name not found in the first row.")
-        return user_name
 
-    def search_for_user_name(self, user_name):
-        """Enters the username in the search input field."""
-        search_bar = self.driver.find_element(*self.search_input)
-        search_bar.send_keys(user_name)
-        time.sleep(2)  # Consider replacing with an explicit wait
-
-    def clear_search(self):
-        """Clears the search input field."""
-        clear_search = self.driver.find_element(*self.clear_search_icon)
-        clear_search.click()
-        time.sleep(2)
 
 
     # Methods for pagination
