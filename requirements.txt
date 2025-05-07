@@ -2,3 +2,5 @@ selenium==4.28.1
 pytest==8.3.5
 Faker==36.1.1
 python-dateutil==2.8.2
+webdriver-manager==4.0.2
+requests==2.32.3
