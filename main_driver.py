@@ -31,7 +31,7 @@ def test_edit_user(reinstatement_page):
         reinstatement_page.test_edit_user()
         time.sleep(2)
 
-# Run View user test
+# Run view user test
 def test_view_user(reinstatement_page):
         reinstatement_page.test_view_user()
         time.sleep(2)
@@ -42,7 +42,7 @@ def test_delete_user(reinstatement_page):
         reinstatement_page.test_delete_user()
         time.sleep(2)
 
-# Run search user
+# Run with search user
 def test_search_user_functionality(reinstatement_page):
         reinstatement_page.test_search_user()
         time.sleep(2)
