@@ -67,11 +67,11 @@ class TestLogin:  # ✅ Class name starts with "Test"
                 break
 
         time.sleep(3)
-        self.page.enter_email("rajni.1156@zenmonk.tech")
+        self.page.enter_email("username")
         time.sleep(2)
         self.page.click_email_next()
         time.sleep(3)
-        self.page.enter_password("Rajnikar2022")
+        self.page.enter_password("password")
         time.sleep(3)
         self.page.click_password_next()
         time.sleep(3)
