@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  # Selenium Chrome service with VNC for visual debugging
+  chrome:
+    image: selenium/standalone-chrome:latest
+    container_name: chrome
+    shm_size: 2g
+    ports:
+      - "4444:4444"  # Selenium WebDriver port
+      - "7900:7900"  # noVNC port (access at http://localhost:7900/?autoconnect=true&reconnect=true&resize=scale&password=)
+    environment:
+      - SE_VNC_NO_PASSWORD=1  # Disable VNC password
+      - VNC_NO_PASSWORD=1     # Disable VNC password (legacy setting)
+      - START_XVFB=true       # Start X virtual framebuffer
+      - SE_SCREEN_WIDTH=1920  # Screen width
+      - SE_SCREEN_HEIGHT=1080 # Screen height
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - reinstatement-responsible-shared-network
+
+  # Test runner service
+  selenium-tests:
+    build: .
+    container_name: selenium-tests
+    depends_on:
+      - chrome
+    environment:
+      - PYTHONUNBUFFERED=1
+      - TEST_LANGUAGE=Español
+      - BASE_URL=https://reinstatements-delegations-reinstatement-responsg-iymj66chvq-uc.a.run.app/
+      - SELENIUM_HEADLESS=0
+      - MOCK_MODE=0
+      - SELENIUM_REMOTE_URL=http://chrome:4444/wd/hub
+    volumes:
+      - .:/app  # Mount current directory for development
+    networks:
+      - reinstatement-responsible-shared-network
+    command: python -m pytest main_driver.py -v
+
+networks:
+  reinstatement-responsible-shared-network:
+    external: true
