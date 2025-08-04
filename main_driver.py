@@ -10,7 +10,7 @@ def test_setup_language():
     os.environ["TEST_LANGUAGE"] = Config.language
 
 @pytest.fixture(scope="module")
-def reinstatement_page():
+def reinstatement_test():
         login_test = TestLogin()
         login_test.setup_method()
         login_test.test_login_user()
@@ -22,45 +22,45 @@ def reinstatement_page():
         return user
 
 # Run create user management tests
-def test_create_user(reinstatement_page):
-        reinstatement_page.create_user()
+def test_create_user(reinstatement_test):
+        reinstatement_test.create_user()
         time.sleep(1)
 
 # Run edit user test
-def test_edit_user(reinstatement_page):
-        reinstatement_page.test_edit_user()
+def test_edit_user(reinstatement_test):
+        reinstatement_test.test_edit_user()
         time.sleep(2)
 
 # Run View user test
-def test_view_user(reinstatement_page):
-        reinstatement_page.test_view_user()
+def test_view_user(reinstatement_test):
+        reinstatement_test.test_view_user()
         time.sleep(2)
         print("View information successfully")
 
 # Run delete user test
-def test_delete_user(reinstatement_page):
-        reinstatement_page.test_delete_user()
+def test_delete_user(reinstatement_test):
+        reinstatement_test.test_delete_user()
         time.sleep(2)
 
 # Run search user
-def test_search_user_functionality(reinstatement_page):
-        reinstatement_page.test_search_user()
+def test_search_user_functionality(reinstatement_test):
+        reinstatement_test.test_search_user()
         time.sleep(2)
         print("User search successfully")
 
 # Run filter user test
-def test_filter_functionality(reinstatement_page):
-        reinstatement_page.test_filter_functionality()
+def test_filter_functionality(reinstatement_test):
+        reinstatement_test.test_filter_functionality()
         time.sleep(2)
         print("Headquarter and Status filter working successfully")
 
 # Run for pagination of user test
-def test_pagination(reinstatement_page):
-        reinstatement_page.test_pagination()
+def test_pagination(reinstatement_test):
+        reinstatement_test.test_pagination()
         time.sleep(2)
         print("Pagination is working successfully")
 
 # Run Already exist user
-def test_already_exist_user(reinstatement_page):
-        reinstatement_page.test_already_exist_user()
+def test_already_exist_user(reinstatement_test):
+        reinstatement_test.test_already_exist_user()
         time.sleep(2)

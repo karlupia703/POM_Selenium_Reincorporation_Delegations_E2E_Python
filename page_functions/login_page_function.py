@@ -6,14 +6,26 @@ from page_object.login_page import LoginPage
 from config.config import Config
 from test_data.translations import Translations
 
+# class TestLogin:
+#     def __init__(self):
+#         self.base_url = Config.base_url
+#
+#     def test_setup_method(self):
+#         self.driver = DriverManager.get_driver()
+#         self.driver.get(self.base_url)
+#         self.page = LoginPage(self.driver)
+
 class TestLogin:
     def __init__(self):
         self.base_url = Config.base_url
 
     def setup_method(self):
         self.driver = DriverManager.get_driver()
+        time.sleep(2)
         self.driver.get(self.base_url)
+        time.sleep(3)
         self.page = LoginPage(self.driver)
+        time.sleep(3)
 
     def test_login_user(self):
         expected_texts = Translations.get_translation(Config.language)
