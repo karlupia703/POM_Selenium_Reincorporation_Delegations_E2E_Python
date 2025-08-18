@@ -21,6 +21,7 @@ class LoginPage:
     login_title= (By.CSS_SELECTOR, "[data-test-id='login-app-title']")
     access_with_google_text = (By.CSS_SELECTOR, "[data-test-id='login-app-title-sub-text']")
 
+    # Page Operations
     def click_language_dropdown(self):
         self.driver.find_element(*self.language_dropdown).click()
 

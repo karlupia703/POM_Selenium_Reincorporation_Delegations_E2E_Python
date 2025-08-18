@@ -13,7 +13,7 @@ def test_setup_language():
 def reinstatement_test():
         login_test = TestLogin()
         login_test.setup_method()
-        login_test.test_login_user()
+        login_test.test_login_with_valid_user()
         print("User login successful.")
 
         # Initialize CreateUserTest

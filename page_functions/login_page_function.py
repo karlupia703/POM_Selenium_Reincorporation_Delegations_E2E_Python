@@ -18,14 +18,17 @@ class TestLogin:
         self.page = LoginPage(self.driver)
         time.sleep(3)
 
-    def test_login_user(self):
+    def test_login_with_valid_user(self):
+        # Object Mother: Get expected UI text based on language
         expected_texts = Translations.get_translation(Config.language)
         self.switch_language_if_needed(Config.language, expected_texts)
+
+        # Page Operation: Click Google Sign-in
         self.page.click_google_sign_in()
         self.handle_google_login()
 
     def switch_language_if_needed(self, target_language, expected_texts):
-        # Switch the language if it's different from the target.
+        # Page Operation: Change language if required
         current_language = self.page.get_selected_language().strip().split("(")[0].strip()
 
         if current_language.lower() != target_language.lower():
@@ -36,6 +39,7 @@ class TestLogin:
         self.verify_login_texts(expected_texts)
 
     def verify_login_texts(self, expected_texts):
+        # Assertion: Verify UI text before login
         assert self.page.is_title_correct(expected_texts["title"]), "Title text mismatch"
         assert self.page.is_google_button_correct(expected_texts["button"]), "Google button text mismatch"
         assert self.page.is_access_with_google_text_correct(expected_texts["accessWithGoogle"]), "Access with Google text mismatch"
@@ -50,6 +54,7 @@ class TestLogin:
                 break
 
         time.sleep(3)
+        # Perform login using credentials
         self.page.enter_email(Config.email)
         self.page.click_email_next()
         time.sleep(3)
