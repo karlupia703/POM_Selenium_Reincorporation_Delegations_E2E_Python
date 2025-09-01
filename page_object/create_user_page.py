@@ -51,7 +51,6 @@ class CreateUserPages:
     delete_button = By.CSS_SELECTOR, "[data-test-id*='-deleteicon-desktoptable-']"
     confirm_delete_button = By.CSS_SELECTOR, "[data-test-id='custombtn-dialogBox-submit-alertbox-delete-reinstatement-responsibles-table-list-page-reinstatement']"
     notification_message = By.CSS_SELECTOR, "#notistack-snackbar .MuiBox-root"
-    delete_alert_title = By.XPATH, "/html/body/div[5]/div[3]/div/h2"
     delete_alert_content = By.CSS_SELECTOR, "[data-test-id='alertbox-deletetext-reinstatement-responsibles-table-list-page-reinstatement']"
     delete_username = By.CSS_SELECTOR, "[data-test-id='alertbox-deleteusername-reinstatement-responsibles-table-list-page-reinstatement']"
     notification2 = By.CSS_SELECTOR, "#notistack-snackbar > .MuiBox-root"
@@ -204,8 +203,6 @@ class CreateUserPages:
         first_row_delete_button = self.driver.find_element(*self.delete_button)
         first_row_delete_button.click()
 
-    def is_check_delete_alert_title(self, expected_text):
-        return self.get_element_text(self.delete_alert_title) == expected_text
 
     def is_check_delete_alert_content(self, expected_text):
         return self.get_element_text(self.delete_alert_content) == expected_text

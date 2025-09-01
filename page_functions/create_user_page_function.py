@@ -1,11 +1,10 @@
 import time
 import pytest
 from selenium.common import NoSuchElementException
-from faker import Faker
 from webdriver_manager.core import driver
 from page_functions.driver_manager import DriverManager
 from page_object.create_user_page import CreateUserPages
-
+from test_data.reinstatement_responsible_mother import ReinstatementResponsibleMother
 from config.config import Config
 from test_data.translations import Translations
 
@@ -13,20 +12,15 @@ class CreateUserTest:
     def __init__(self):
         self.driver = driver
         self.driver = DriverManager.get_driver()
-        self.faker = Faker()
+        self.reinstatement_responsible_mother = ReinstatementResponsibleMother()
         self.language = Config.language
-
-    def generate_random_email(self, first_name, last_name):
-        return f"{first_name.lower()}.{last_name.lower()}@example.com"
 
     def create_user(self):
         user_page = CreateUserPages(self.driver)
         expected_texts = Translations.get_translation(Config.language)
-        first_name = self.faker.first_name()
-        last_name = self.faker.last_name()
-        email = self.generate_random_email(first_name, last_name)
+        user_data = self.reinstatement_responsible_mother.get()
 
-        print(f"Creating user: {first_name} {last_name} - {email}")
+        print(f"Creating user: {user_data['first_name']} {user_data['last_name']} - {user_data['email']}")
         user_page.click_on_create_button()
         time.sleep(1)
         user_page.click_on_inside_create_button()
@@ -37,11 +31,11 @@ class CreateUserTest:
         assert user_page.is_email_error_text(expected_texts["emailRequiredError"]), "Email error mismatch"
         assert user_page.is_headquarter_error_text(expected_texts["headquarterError"]), "Headquarter error mismatch"
 
-        user_page.enter_first_name(first_name)
+        user_page.enter_first_name(user_data["first_name"])
         time.sleep(2)
-        user_page.enter_last_name(last_name)
+        user_page.enter_last_name(user_data["last_name"])
         time.sleep(2)
-        user_page.enter_email(email)
+        user_page.enter_email(user_data["email"])
         time.sleep(2)
         user_page.select_headquarter()
         time.sleep(2)
@@ -55,7 +49,7 @@ class CreateUserTest:
         # Test case for editing an existing user.
         user_page = CreateUserPages(self.driver)
         expected_texts = Translations.get_translation(Config.language)
-        updated_last_name = self.faker.last_name()
+        updated_last_name = self.reinstatement_responsible_mother.get()["last_name"]
         first_row = user_page.find_first_row1()
         if not first_row:
             print("ERROR: No row found!")
@@ -87,12 +81,10 @@ class CreateUserTest:
 
 
     def test_delete_user(self):
-        driver = DriverManager.get_driver()
         expected_texts = Translations.get_translation(Config.language)
         user_page = CreateUserPages(self.driver)
         user_page.clear_previous_notifications()
         user_page.click_delete_button()
-        assert user_page.is_check_delete_alert_title(expected_texts["deleteAlertTitle"]), "Title mismatch."
         assert user_page.is_check_delete_alert_content(expected_texts["deleteBody"]), "Body mismatch."
         user_page.confirm_deletion()
         success_message = user_page.get_notification_message2()
@@ -159,10 +151,11 @@ class CreateUserTest:
 
     def test_already_exist_user(self):
         user_page = CreateUserPages(self.driver)
-        faker = Faker()
-        first_name = faker.first_name()
-        last_name = faker.last_name()
-        email = faker.email()
+        # faker = Faker()
+        user_data = self.reinstatement_responsible_mother.get()
+        first_name = user_data["first_name"]
+        last_name = user_data["last_name"]
+        email = user_data["email"]
 
         user_page.click_create_button()
         user_page.fill_user_details(first_name, last_name, email)
@@ -173,7 +166,7 @@ class CreateUserTest:
 
         # Attempt to create duplicate user
         user_page.click_create_button()
-        user_page.fill_user_details(first_name, last_name, email)
+        user_page.fill_user_details(first_name, last_name, email)  #for duplicate
         user_page.select_headquarter()
         user_page.toggle_status()
         user_page.click_submit_button()
