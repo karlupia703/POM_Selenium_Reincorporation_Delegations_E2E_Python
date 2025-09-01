@@ -3,6 +3,7 @@ import time
 import random
 import re
 from selenium import webdriver
+from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
@@ -11,82 +12,80 @@ from selenium.common.exceptions import NoSuchElementException, TimeoutException,
 from selenium.webdriver.common.action_chains import ActionChains
 
 class CreateUserPages:
-    def __init__(self, driver):
+    def __init__(self, driver: WebDriver):
         self.driver = driver
         self.wait = WebDriverWait(driver, 20)  # Initialize WebDriverWait
 
-        # Using explicit waits for element location for create user
-        self.create_btn = (By.CSS_SELECTOR, "[data-test-id=\"button-responsibleform-create\"]")
-        self.inside_btn = (By.CSS_SELECTOR, "[data-test-id=\"custombtn-modal-responsibleform-create-submit\"]")
-        self.firstname = (By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[1]/div/input")
-        self.lastname = (By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[2]/div/input")
-        self.email_address = (By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[3]/div/input")
-        self.headquarter = (By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[4]/div/div/div/button")
-        self.dropdown_options = (By.XPATH, "//ul[@role='listbox']/li")
-        self.submit = (By.CSS_SELECTOR, "[data-test-id=\"custombtn-modal-responsibleform-create-submit\"]")
+    # Using element location for create user
+    create_btn = By.CSS_SELECTOR, "[data-test-id='button-responsibleform-create']"
+    inside_btn = By.CSS_SELECTOR, "[data-test-id='custombtn-modal-responsibleform-create-submit']"
+    firstname = By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[1]/div/input"
+    lastname = By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[2]/div/input"
+    email_address = By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[3]/div/input"
+    headquarter = By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[4]/div/div/div/button"
+    dropdown_options = By.XPATH, "//ul[@role='listbox']/li"
+    submit = By.CSS_SELECTOR, "[data-test-id='custombtn-modal-responsibleform-create-submit']"
 
-        # For Assertions
-        self.first_name_error = (By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[1]/p")
-        self.last_name_error = (By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[2]/p")
-        self.email_error = (By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[3]/p")
-        self.headquarter_error = (By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[4]/div/p")
-        self.success_message_of_createUser = (By.CSS_SELECTOR, "#notistack-snackbar .MuiBox-root")
+    # For Assertions
+    first_name_error = By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[1]/p"
+    last_name_error = By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[2]/p"
+    email_error = By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[3]/p"
+    headquarter_error = By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[4]/div/p"
+    success_message = By.CSS_SELECTOR, "div[id='notistack-snackbar'] div[class='MuiBox-root mui-0']"
 
-        # Using element location for edit user
-        self.find_first_row = (By.CSS_SELECTOR, "tbody tr:nth-child(1) td:nth-child(5) div:nth-child(1) button:nth-child(2) svg")
-        self.last_name_field = (By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[2]/div/input")
-        self.clear_last_name = (By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[2]/div/input")
-        self.edit_button = (By.XPATH, "/html/body/div[5]/div[3]/div[3]/button[2]")
-        self.confirm_dialog_box = (By.XPATH, "/html/body/div[6]/div[3]/div/div[2]/button[2]")
-        self.edit_cancel_alert_title = (By.CSS_SELECTOR, "[data-test-id=\"dialogBox-title-alertBox-responsiblitiesform-edit\"]")
-        self.edit_cancel_alert_content = (By.CSS_SELECTOR, "[data-test-id=\"dialogBox-content-alertBox-responsiblitiesform-edit\"]")
-        self.edit_snackbar_message = (By.XPATH, "(//div[@class='notistack-Snackbar go3963613292'])[1]")
+    # Using element location for edit user
+    find_first_row = By.CSS_SELECTOR, "tbody tr:nth-child(1) td:nth-child(5) div:nth-child(1) button:nth-child(2) svg"
+    last_name_field = By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[2]/div/input"
+    clear_last_name = By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[2]/div/input"
+    edit_button = By.XPATH, "/html/body/div[5]/div[3]/div[3]/button[2]"
+    confirm_dialog_box = By.XPATH, "/html/body/div[6]/div[3]/div/div[2]/button[2]"
+    edit_cancel_alert_title = By.CSS_SELECTOR, "[data-test-id='dialogBox-title-alertBox-responsiblitiesform-edit']"
+    edit_cancel_alert_content = By.CSS_SELECTOR, "[data-test-id='dialogBox-content-alertBox-responsiblitiesform-edit']"
+    edit_snackbar_message = By.XPATH, "(//div[@class='notistack-Snackbar go3963613292'])[1]"
 
-        # Using element location for view user
-        self.find_first_row_view_icon = (By.XPATH, "/html/body/div[1]/div/div[2]/div/div/div[2]/div[2]/div[1]/div/table/tbody/tr[1]/td[5]/div/button[1]")
-        self.cross_icon_view = (By.CSS_SELECTOR, "[data-test-id=\"customdialog-canclebtn-view-viewresponsible-reinstatement-responsibles-table-list-page-reinstatement\"]")
+    # Using element location for view user
+    find_first_row_view_icon = By.CSS_SELECTOR, "[data-test-id*='-viewicon-desktoptable-']"
+    cross_icon_view = By.CSS_SELECTOR, "[data-test-id='customdialog-canclebtn-view-viewresponsible-reinstatement-responsibles-table-list-page-reinstatement']"
 
-        # Using element location for delete user
-        self.delete_button = (By.CSS_SELECTOR, "[data-test-id*='-deleteicon-desktoptable-']")
-        self.confirm_delete_button = (By.CSS_SELECTOR, "[data-test-id='custombtn-dialogBox-submit-alertbox-delete-reinstatement-responsibles-table-list-page-reinstatement']")
-        self.notification_message = (By.CSS_SELECTOR, "#notistack-snackbar .MuiBox-root")
-        self.delete_alert_title = By.XPATH, "/html/body/div[5]/div[3]/div/h2"
-        self.delete_alert_content = (By.CSS_SELECTOR, "[data-test-id=\"alertbox-deletetext-reinstatement-responsibles-table-list-page-reinstatement\"]")
-        self.delete_username = (By.CSS_SELECTOR, "[data-test-id=\"alertbox-deleteusername-reinstatement-responsibles-table-list-page-reinstatement\"]")
-        self.notification2 = (By.CSS_SELECTOR, "#notistack-snackbar > .MuiBox-root")
+    # Using element location for delete user
+    delete_button = By.CSS_SELECTOR, "[data-test-id*='-deleteicon-desktoptable-']"
+    confirm_delete_button = By.CSS_SELECTOR, "[data-test-id='custombtn-dialogBox-submit-alertbox-delete-reinstatement-responsibles-table-list-page-reinstatement']"
+    notification_message = By.CSS_SELECTOR, "#notistack-snackbar .MuiBox-root"
+    delete_alert_title = By.XPATH, "/html/body/div[5]/div[3]/div/h2"
+    delete_alert_content = By.CSS_SELECTOR, "[data-test-id='alertbox-deletetext-reinstatement-responsibles-table-list-page-reinstatement']"
+    delete_username = By.CSS_SELECTOR, "[data-test-id='alertbox-deleteusername-reinstatement-responsibles-table-list-page-reinstatement']"
+    notification2 = By.CSS_SELECTOR, "#notistack-snackbar > .MuiBox-root"
 
-        # Using element location for test filter
-        self.headquarter_dropdown_filter = (By.CSS_SELECTOR, "[data-test-id='chip-label-autocompletefilter-destop-filter-headquarter-page-reinstatement']")
-        self.headquarter_list = By.XPATH, "/html/body/div[5]/div[3]/div[2]/ul/li"
-        self.option_ao = (By.CSS_SELECTOR, "[data-test-id='list-item-AO-autocompletefilter-destop-filter-headquarter-page-reinstatement']")
-        self.option_cl = (By.CSS_SELECTOR, "[data-test-id='list-item-CL-autocompletefilter-destop-filter-headquarter-page-reinstatement']")
-        self.close_dropdown = (By.TAG_NAME, "body")
-        self.clear_filters = (By.XPATH, "/html/body/div[1]/div/div[2]/div/div/div[2]/div[1]/div[4]")
-        self.status_filter = By.CSS_SELECTOR, "[data-test-id='label-render-value-filter-status-page-reinstatement']"
-        self.status_filter_dropdown = By.XPATH, "/html/body/div[5]/div[3]/ul/li"
+    # Using element location for search user
+    table_body = By.XPATH, "/html/body/div[1]/div/div[2]/div/div/div[2]/div[2]/div[1]/div/table/tbody"
+    search_input = By.XPATH, "//input[@placeholder='Search responsible' or @placeholder='Buscar Responsable' or @placeholder='Cerca responsabile' or @placeholder='Pesquisar responsável']"
+    clear_search_icon = (By.CSS_SELECTOR, "[data-test-id='icon-clear-searchbar-page-reinstatement']")
 
-        # Using element location for search user
-        self.wait = WebDriverWait(driver, 10)
-        self.table_body = By.XPATH, "/html/body/div[1]/div/div[2]/div/div/div[2]/div[2]/div[1]/div/table/tbody"
-        self.search_input = By.XPATH, "//input[@placeholder='Search responsible' or @placeholder='Buscar Responsable' or @placeholder='Cerca responsabile' or @placeholder='Pesquisar responsável']"
-        self.clear_search_icon = (By.CSS_SELECTOR, "[data-test-id='icon-clear-searchbar-page-reinstatement']")
+    # Using element location for test filter
+    headquarter_dropdown_filter = By.CSS_SELECTOR, "[data-test-id='chip-label-autocompletefilter-destop-filter-headquarter-page-reinstatement']"
+    headquarter_list = By.XPATH, "/html/body/div[5]/div[3]/div[2]/ul/li"
+    option_ao = By.CSS_SELECTOR, "[data-test-id='list-item-AO-autocompletefilter-destop-filter-headquarter-page-reinstatement']"
+    option_cl = By.CSS_SELECTOR, "[data-test-id='list-item-CL-autocompletefilter-destop-filter-headquarter-page-reinstatement']"
+    close_dropdown = By.TAG_NAME, "body"
+    clear_filters = By.CSS_SELECTOR, "[data-test-id='clear-btn-header-page-reinstatement']"
+    status_filter = By.CSS_SELECTOR, "[data-test-id='label-render-value-filter-status-page-reinstatement']"
+    status_filter_dropdown = By.XPATH, "/html/body/div[5]/div[3]/ul/li"
 
-        # Locators for pagination
-        self.right_arrow = (By.CSS_SELECTOR, "[data-testid='KeyboardArrowRightIcon']")
-        self.left_arrow = (By.CSS_SELECTOR, "[data-testid='KeyboardArrowLeftIcon']")
+    # Locators for pagination
+    right_arrow = (By.CSS_SELECTOR, "[data-testid='KeyboardArrowRightIcon']")
+    left_arrow = (By.CSS_SELECTOR, "[data-testid='KeyboardArrowLeftIcon']")
 
-        # Locators for Already exist user
-        self.create_button = By.XPATH, "/html/body/div[1]/div/div[2]/div/div/div[1]/button"
-        self.first_name_field = By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[1]/div/input"
-        self.last_name_field = By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[2]/div/input"
-        self.email_field = By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[3]/div/input"
-        self.headquarter_dropdown = By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[4]/div/div/div/button"
-        self.status_toggle = By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/label/span[1]/span[1]"
-        self.submit_button = By.XPATH, "/html/body/div[5]/div[3]/div[3]/button[2]"
-        self.cancel_button = By.XPATH, "/html/body/div[5]/div[3]/div[3]/button[1]"
-        self.yes_button = By.XPATH, "/html/body/div[6]/div[3]/div/div[2]/button[2]"
-        self.success_message = By.CSS_SELECTOR, "div[id='notistack-snackbar'] div[class='MuiBox-root mui-0']"
-        self.email_already_exist_toster_msg = By.CSS_SELECTOR, "div[id='notistack-snackbar'] div[class='MuiBox-root mui-0']"
+    # Locators for Already exist user
+    create_button = By.XPATH, "/html/body/div[1]/div/div[2]/div/div/div[1]/button"
+    first_name_field = By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[1]/div/input"
+    email_field = By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[3]/div/input"
+    headquarter_dropdown = By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[4]/div/div/div/button"
+    status_toggle = By.CSS_SELECTOR, "[data-test-id='input-responsibleswitch-responsibleform-create']"
+    submit_button = By.CSS_SELECTOR, "[data-test-id='custombtn-modal-responsibleform-create-submit']"
+    cancel_button = By.CSS_SELECTOR, "[data-test-id='modal-cancelaction-responsibleform-create']"
+    yes_button = By.CSS_SELECTOR, "[data-test-id='custombtn-dialogBox-submit-alertBox-responsibleform-create']"
+    success_message_of_createUser = (By.CSS_SELECTOR, "#notistack-snackbar .MuiBox-root")
+    email_already_exist_toster_msg = By.CSS_SELECTOR, "div[id='notistack-snackbar'] div[class='MuiBox-root mui-0']"
 
 
     # Method of Create user
@@ -123,6 +122,7 @@ class CreateUserPages:
         """Checks if the headquarter error text matches the expected text."""
         return self.get_element_text(self.headquarter_error) == expected_text
 
+
     def enter_first_name(self, first_name):
         # Enters the first name in the input field.
         self.driver.find_element(*self.firstname).send_keys(first_name)
@@ -136,7 +136,7 @@ class CreateUserPages:
         self.driver.find_element(*self.email_address).send_keys(email)
 
     def select_headquarter(self):
-        # Selects a random headquarter from the dropdown.
+        # Selects a random headquarters from the dropdown.
         self.driver.find_element(*self.headquarter).click()
         options = self.driver.find_elements(*self.dropdown_options)
         if options:
@@ -146,7 +146,6 @@ class CreateUserPages:
             print("No options available in the dropdown.")
 
     def click_on_submit_btn(self):
-        """Clicks the submit button."""
         self.driver.find_element(*self.submit).click()
 
     # Method of Edit User
@@ -166,7 +165,7 @@ class CreateUserPages:
         )
         last_name_field.click()
         # Clear the field properly
-        last_name_field.send_keys(Keys.CONTROL, "a")  # Select all text
+        last_name_field.send_keys(Keys.CONTROL, "a")
         last_name_field.send_keys(Keys.DELETE)
         time.sleep(1)
 
@@ -194,7 +193,6 @@ class CreateUserPages:
 
      # Method of View User
     def click_on_view_icon1(self):
-        first_row1 = self.wait.until(EC.presence_of_element_located(self.find_first_row_view_icon))
         self.wait.until(EC.element_to_be_clickable(self.find_first_row_view_icon)).click()
 
     def click_on_view_cross_icon(self):
@@ -203,7 +201,6 @@ class CreateUserPages:
 
     # Methods of Delete User
     def click_delete_button(self):
-        """Clicks the delete button on the first row."""
         first_row_delete_button = self.driver.find_element(*self.delete_button)
         first_row_delete_button.click()
 
@@ -231,12 +228,10 @@ class CreateUserPages:
 
     # Methods of Search
     def get_first_row(self):
-        """Waits for the table body and returns the first row element."""
         table_body_element = self.wait.until(EC.presence_of_element_located(self.table_body))
         return table_body_element.find_element(By.CSS_SELECTOR, ":first-child")
 
     def extract_uuid_from_row(self, first_row):
-        """Extracts UUID from the first row's 'data-test-id' attribute."""
         data_test_id = first_row.get_attribute("data-test-id")
         if data_test_id is None:
             raise ValueError("No data-test-id attribute found for the first row.")
@@ -248,7 +243,6 @@ class CreateUserPages:
             raise ValueError(f"No valid UUID found in data-test-id: {data_test_id}")
 
     def get_user_name(self, first_row, uuid):
-        """Retrieves the username from the first row using the extracted UUID."""
         user_name_element = first_row.find_element(
             By.CSS_SELECTOR,
             f"[data-test-id='tablebodycell-{uuid}-responsiblename-text-desktoptable-reinstatement-responsibles-table-list-page-reinstatement']"
@@ -259,7 +253,6 @@ class CreateUserPages:
         return user_name
 
     def search_for_user_name(self, user_name):
-        """Enters the username in the search input field."""
         search_bar = WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable(self.search_input)
         )
@@ -315,8 +308,6 @@ class CreateUserPages:
         else:
             print("No options available in the dropdown.")
             time.sleep(3)
-
-
 
 
     # Methods for pagination

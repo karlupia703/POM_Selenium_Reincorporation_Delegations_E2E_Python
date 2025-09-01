@@ -3,8 +3,6 @@ import pytest
 from selenium.common import NoSuchElementException
 from faker import Faker
 from webdriver_manager.core import driver
-
-from page_object.create_user_page import CreateUserPages
 from page_functions.driver_manager import DriverManager
 from page_object.create_user_page import CreateUserPages
 
@@ -22,7 +20,6 @@ class CreateUserTest:
         return f"{first_name.lower()}.{last_name.lower()}@example.com"
 
     def create_user(self):
-        # Test case for creating a new user.
         user_page = CreateUserPages(self.driver)
         expected_texts = Translations.get_translation(Config.language)
         first_name = self.faker.first_name()
@@ -92,7 +89,7 @@ class CreateUserTest:
     def test_delete_user(self):
         driver = DriverManager.get_driver()
         expected_texts = Translations.get_translation(Config.language)
-        user_page = CreateUserPages(driver)
+        user_page = CreateUserPages(self.driver)
         user_page.clear_previous_notifications()
         user_page.click_delete_button()
         assert user_page.is_check_delete_alert_title(expected_texts["deleteAlertTitle"]), "Title mismatch."

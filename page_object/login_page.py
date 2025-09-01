@@ -10,20 +10,21 @@ class LoginPage:
         self.wait = WebDriverWait(driver, 10)
 
     # Selectors
-    language_dropdown = (By.CSS_SELECTOR, "[data-test-id='login-language-select']")
-    google_sign_in_button = (By.CSS_SELECTOR, "[data-test-id='login-button-text']")
-    email_input = (By.XPATH, "//input[@type='email']")
-    email_next_button= (By.XPATH, "//span[text()='Next']")
-    password_input = (By.XPATH, "//input[@type='password']")
-    password_next_button= (By.XPATH, "//span[text()='Next']")
+    language_dropdown = By.CSS_SELECTOR, "[data-test-id='login-language-select']"
+    google_sign_in_button = By.CSS_SELECTOR, "[data-test-id='login-button-text']"
+    email_input = By.XPATH, "//input[@type='email']"
+    email_next_button= By.XPATH, "//span[text()='Next']"
+    password_input = By.XPATH, "//input[@type='password']"
+    password_next_button= By.XPATH, "//span[text()='Next']"
 
     # Assertions Selectors
-    login_title= (By.CSS_SELECTOR, "[data-test-id='login-app-title']")
-    access_with_google_text = (By.CSS_SELECTOR, "[data-test-id='login-app-title-sub-text']")
+    login_title= By.CSS_SELECTOR, "[data-test-id='login-app-title']"
+    access_with_google_text = By.CSS_SELECTOR, "[data-test-id='login-app-title-sub-text']"
 
     # Page Operations
     def click_language_dropdown(self):
         self.driver.find_element(*self.language_dropdown).click()
+
 
     def select_language(self, language_code: str):
         language_option = (By.CSS_SELECTOR, f"[data-value='{language_code}']")
