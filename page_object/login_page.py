@@ -3,11 +3,13 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.common.keys import Keys
+from config.config import Config
+from page_object.base_page import BasePage
 
-class LoginPage:
+
+class LoginPage(BasePage):
     def __init__(self, driver: WebDriver):
-        self.driver = driver
-        self.wait = WebDriverWait(driver, 10)
+        super().__init__(driver)
 
     # Selectors
     language_dropdown = By.CSS_SELECTOR, "[data-test-id='login-language-select']"
@@ -18,17 +20,17 @@ class LoginPage:
     password_next_button= By.XPATH, "//span[text()='Next']"
 
     # Assertions Selectors
-    login_title= By.CSS_SELECTOR, "[data-test-id='login-app-title']"
-    access_with_google_text = By.CSS_SELECTOR, "[data-test-id='login-app-title-sub-text']"
+    login_title= By.CSS_SELECTOR, "[data-test-id='text-title-loginCarouselTitle2-carousel-login']"
+    access_with_google_text = By.XPATH, "/html/body/div/div/div/div[2]/p[2]"
 
     # Page Operations
     def click_language_dropdown(self):
-        self.driver.find_element(*self.language_dropdown).click()
-
+        self.click(self.language_dropdown)
 
     def select_language(self, language_code: str):
         language_option = (By.CSS_SELECTOR, f"[data-value='{language_code}']")
         self.driver.find_element(*language_option).click()
+        print(f"Running tests in language: {Config.LANGUAGE}")
 
     def get_selected_language(self) -> str:
         try:
@@ -38,19 +40,20 @@ class LoginPage:
             return language_element.text.strip()
         except:
             print("Language dropdown not found")
-            return None
+            return ""
 
     def click_google_sign_in(self):
-        self.driver.find_element(*self.google_sign_in_button).click()
+        self.click(self.google_sign_in_button)
 
     def enter_email(self, email: str):
-        email_input = WebDriverWait(self.driver, 15).until(
-            EC.presence_of_element_located(self.email_input)
-        )
-        email_input.send_keys(email)
+        self.enter_text(self.email_input, email)
 
     def click_email_next(self):
-        self.driver.find_element(*self.email_next_button).click()
+        self.click(self.email_next_button)
+
+    # def enter_password(self, password):
+    #      # self.enter_text(self.password_input, password)
+    #     self.driver.find_element(*self.password_input).send_keys(password)
 
     def enter_password(self, password):
         password_input = WebDriverWait(self.driver, 10).until(
@@ -59,7 +62,7 @@ class LoginPage:
         password_input.send_keys(password)
 
     def click_password_next(self):
-        self.driver.find_element(*self.password_next_button).click()
+        self.click(self.password_next_button)
 
     def get_element_text(self, locator: tuple) -> str:
         return self.driver.find_element(*locator).text.strip()

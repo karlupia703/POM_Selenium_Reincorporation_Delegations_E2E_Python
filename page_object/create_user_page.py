@@ -11,13 +11,18 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException, TimeoutException, StaleElementReferenceException
 from selenium.webdriver.common.action_chains import ActionChains
 
-class CreateUserPages:
+from page_object.base_page import BasePage
+
+
+class CreateUserPages(BasePage):
     def __init__(self, driver: WebDriver):
-        self.driver = driver
-        self.wait = WebDriverWait(driver, 20)  # Initialize WebDriverWait
+        super().__init__(driver)
+        # self.driver = driver
+        # self.wait = WebDriverWait(driver, 20)  # Initialize WebDriverWait
 
     # Using element location for create user
-    create_btn = By.CSS_SELECTOR, "[data-test-id='button-responsibleform-create']"
+    # create_btn = By.CSS_SELECTOR, "[data-test-id='button-responsibleform-create']"
+    create_btn = By.XPATH, "/html/body/div[1]/div/div[2]/div/div/div[1]/button"
     inside_btn = By.CSS_SELECTOR, "[data-test-id='custombtn-modal-responsibleform-create-submit']"
     firstname = By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[1]/div/input"
     lastname = By.XPATH, "/html/body/div[5]/div[3]/div[2]/div/form/div[2]/div/input"
@@ -89,11 +94,12 @@ class CreateUserPages:
 
     # Method of Create user
     def click_on_create_button(self):
-        create_button = self.wait.until(EC.element_to_be_clickable(self.create_btn))
-        create_button.click()
+        self.wait.until(EC.element_to_be_clickable(self.create_button)).click()
+        time.sleep(1)
+        # self.click(self.create_btn)
 
     def click_on_inside_create_button(self):
-        self.driver.find_element(*self.inside_btn).click()
+        self.click(self.inside_btn)
 
     # Assertions Method to get the text of an element
     def get_element_text(self, locator):
@@ -106,38 +112,30 @@ class CreateUserPages:
 
     # Method to assert  text
     def is_first_name_error_text(self, expected_text):
-        """Checks if the first name error text matches the expected text."""
         return self.get_element_text(self.first_name_error) == expected_text
 
     def is_last_name_error_text(self, expected_text):
-        """Checks if the last name error text matches the expected text."""
         return self.get_element_text(self.last_name_error) == expected_text
 
     def is_email_error_text(self, expected_text):
-        """Checks if the email field error text matches the expected text."""
         return self.get_element_text(self.email_error) == expected_text
 
     def is_headquarter_error_text(self, expected_text):
-        """Checks if the headquarter error text matches the expected text."""
         return self.get_element_text(self.headquarter_error) == expected_text
 
 
     def enter_first_name(self, first_name):
-        # Enters the first name in the input field.
-        self.driver.find_element(*self.firstname).send_keys(first_name)
+         self.enter_text(self.firstname, first_name)
 
     def enter_last_name(self, last_name):
-        # Enters the last name in the input field.
-        self.driver.find_element(*self.lastname).send_keys(last_name)
+        self.enter_text(self.lastname, last_name)
 
     def enter_email(self, email):
-        # Enters the email in the input field.
-        self.driver.find_element(*self.email_address).send_keys(email)
+        self.enter_text(self.email_address, email)
 
     def select_headquarter(self):
-        # Selects a random headquarters from the dropdown.
-        self.driver.find_element(*self.headquarter).click()
-        options = self.driver.find_elements(*self.dropdown_options)
+        self.click(self.headquarter)
+        options = self.click(self.dropdown_options)
         if options:
             random_option = random.choice(options)
             random_option.click()
@@ -145,17 +143,17 @@ class CreateUserPages:
             print("No options available in the dropdown.")
 
     def click_on_submit_btn(self):
-        self.driver.find_element(*self.submit).click()
+        self.click(self.submit)
 
     # Method of Edit User
     def find_first_row1(self):
-        # Finds and clicks the first row in the user table.
         try:
             first_row = self.driver.find_element(By.CSS_SELECTOR, "[data-test-id*='-editicon-desktoptable-']")
             first_row.click()
             return first_row
         except Exception as e:
             print(f"Error finding first row: {e}")
+            self.driver.save_screenshot("..\\Screenshots\\" + "test_first_row.png")
             return None
 
     def click_on_last_name_field(self, updated_last_name):
@@ -175,7 +173,8 @@ class CreateUserPages:
         self.driver.find_element(By.TAG_NAME, "body").click()
 
     def click_on_edit_button(self):
-        self.wait.until(EC.element_to_be_clickable(self.edit_button)).click()
+        # self.wait.until(EC.element_to_be_clickable(self.edit_button)).click()
+        self.click(self.edit_button)
 
     def is_check_edit_cancel_alert_title(self, expected_text):
         return self.wait.until(EC.text_to_be_present_in_element(self.edit_cancel_alert_title, expected_text))
@@ -192,26 +191,27 @@ class CreateUserPages:
 
      # Method of View User
     def click_on_view_icon1(self):
-        self.wait.until(EC.element_to_be_clickable(self.find_first_row_view_icon)).click()
+        self.click(self.find_first_row_view_icon)
 
     def click_on_view_cross_icon(self):
-        self.driver.find_element(*self.cross_icon_view).click()
+        self.click(self.cross_icon_view)
 
 
     # Methods of Delete User
     def click_delete_button(self):
-        first_row_delete_button = self.driver.find_element(*self.delete_button)
-        first_row_delete_button.click()
+        # first_row_delete_button = self.driver.find_element(*self.delete_button)
+        # first_row_delete_button.click()
+        self.click(self.delete_button)
 
 
     def is_check_delete_alert_content(self, expected_text):
         return self.get_element_text(self.delete_alert_content) == expected_text
 
     def check_deleted_username(self):
-        self.driver.find_element(*self.delete_username).click()
+        self.click(self.delete_username)
 
     def confirm_deletion(self):
-        self.driver.find_element(*self.confirm_delete_button).click()
+        self.click(self.confirm_delete_button)
 
     def clear_previous_notifications(self):
         try:
@@ -256,8 +256,7 @@ class CreateUserPages:
         search_bar.send_keys(user_name)
 
     def clear_search(self):
-        clear_search = self.driver.find_element(*self.clear_search_icon)
-        clear_search.click()
+        self.click(self.clear_search_icon)
 
     def search_with_random_text_and_check_no_results(self):
         # Generate random search text
@@ -281,23 +280,23 @@ class CreateUserPages:
 
     # Methods of filters
     def open_filter_dropdown(self):
-        self.driver.find_element(*self.headquarter_dropdown_filter).click()
+        self.click(self.headquarter_dropdown_filter)
 
     def select_option_ao(self):
-        self.driver.find_element(*self.option_ao).click()
+        self.click(self.option_ao)
 
     def select_option_cl(self):
-        self.driver.find_element(*self.option_cl).click()
+        self.click(self.option_cl)
 
     def close_filter_dropdown(self):
        background = self.driver.find_element(*self.close_dropdown)
        ActionChains(self.driver).move_to_element(background).click().perform()
 
     def click_on_clear_filters(self):
-        self.driver.find_element(*self.clear_filters).click()
+        self.click(self.clear_filters)
 
     def open_status_filter_dropdown(self):
-        self.driver.find_element(*self.status_filter).click()
+        self.click(self.status_filter)
         options = self.driver.find_elements(*self.status_filter_dropdown)
         if options:
             random_option = random.choice(options)
@@ -341,16 +340,19 @@ class CreateUserPages:
 
     # Methods for already user exist
     def click_create_button(self):
-        self.wait.until(EC.element_to_be_clickable(self.create_button)).click()
+        self.click(self.create_btn)
 
     def fill_user_details(self, first_name, last_name, email):
-        self.wait.until(EC.visibility_of_element_located(self.first_name_field)).send_keys(first_name)
-        self.wait.until(EC.visibility_of_element_located(self.last_name_field)).send_keys(last_name)
-        self.wait.until(EC.visibility_of_element_located(self.email_field)).send_keys(email)
+        # self.wait.until(EC.visibility_of_element_located(self.first_name_field)).send_keys(first_name)
+        self.enter_text(self.first_name_field, first_name)
+        # self.wait.until(EC.visibility_of_element_located(self.last_name_field)).send_keys(last_name)
+        self.enter_text(self.last_name_field, last_name)
+        # self.wait.until(EC.visibility_of_element_located(self.email_field)).send_keys(email)
+        self.enter_text(self.email_field, email)
 
     def select_headquarter1(self):
-        self.driver.find_element(*self.headquarter).click()
-        options = self.driver.find_elements(*self.dropdown_options)
+        self.click(self.headquarter)
+        options = self.click(self.dropdown_options)
         if options:
             random_option = random.choice(options)
             random_option.click()
@@ -363,13 +365,13 @@ class CreateUserPages:
         toggle.click()
 
     def click_submit_button(self):
-        self.driver.find_element(*self.submit_button).click()
+        self.click(self.submit_button)
 
     def click_cancel_button(self):
-        self.driver.find_element(*self.cancel_button).click()
+        self.click(self.cancel_button)
 
     def click_yes_button(self):
-        self.wait.until(EC.element_to_be_clickable(self.yes_button)).click()
+        self.click(self.yes_button)
 
     def get_success_message(self):
         return self.wait.until(EC.visibility_of_element_located(self.success_message)).text
@@ -379,6 +381,7 @@ class CreateUserPages:
             return self.wait.until(EC.visibility_of_element_located(self.success_message_of_createUser)).text
         except TimeoutException:
             print("Success message not found within the timeout.")
+            self.driver.save_screenshot("..\\Screenshots\\" + "test_get_success_message.png")
             return ""
 
     def get_email_already_exist_message(self):

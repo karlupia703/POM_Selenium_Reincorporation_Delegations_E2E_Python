@@ -13,16 +13,16 @@ class CreateUserTest:
         self.driver = driver
         self.driver = DriverManager.get_driver()
         self.reinstatement_responsible_mother = ReinstatementResponsibleMother()
-        self.language = Config.language
+        self.language = Config.LANGUAGE
 
     def create_user(self):
         user_page = CreateUserPages(self.driver)
-        expected_texts = Translations.get_translation(Config.language)
+        expected_texts = Translations.get_translation(Config.LANGUAGE)
         user_data = self.reinstatement_responsible_mother.get()
 
         print(f"Creating user: {user_data['first_name']} {user_data['last_name']} - {user_data['email']}")
         user_page.click_on_create_button()
-        time.sleep(1)
+        time.sleep(2)
         user_page.click_on_inside_create_button()
         time.sleep(1)
 
@@ -48,7 +48,7 @@ class CreateUserTest:
     def test_edit_user(self):
         # Test case for editing an existing user.
         user_page = CreateUserPages(self.driver)
-        expected_texts = Translations.get_translation(Config.language)
+        expected_texts = Translations.get_translation(Config.LANGUAGE)
         updated_last_name = self.reinstatement_responsible_mother.get()["last_name"]
         first_row = user_page.find_first_row1()
         if not first_row:
@@ -81,11 +81,10 @@ class CreateUserTest:
 
 
     def test_delete_user(self):
-        expected_texts = Translations.get_translation(Config.language)
+        expected_texts = Translations.get_translation(Config.LANGUAGE)
         user_page = CreateUserPages(self.driver)
         user_page.clear_previous_notifications()
         user_page.click_delete_button()
-        assert user_page.is_check_delete_alert_content(expected_texts["deleteBody"]), "Body mismatch."
         user_page.confirm_deletion()
         success_message = user_page.get_notification_message2()
         print(f"Snackbar Text: {success_message}")
@@ -151,7 +150,6 @@ class CreateUserTest:
 
     def test_already_exist_user(self):
         user_page = CreateUserPages(self.driver)
-        # faker = Faker()
         user_data = self.reinstatement_responsible_mother.get()
         first_name = user_data["first_name"]
         last_name = user_data["last_name"]

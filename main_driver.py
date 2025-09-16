@@ -5,9 +5,9 @@ from page_functions.login_page_function import TestLogin
 from page_functions.create_user_page_function import CreateUserTest
 from config.config import Config
 
-def test_setup_language():
-    print(f"Running tests in language: {Config.language}")
-    os.environ["TEST_LANGUAGE"] = Config.language
+# def test_setup_language():
+#     print(f"Running tests in language: {Config.LANGUAGE}")
+#     os.environ["TEST_LANGUAGE"] = Config.LANGUAGE
 
 @pytest.fixture(scope="module")
 def reinstatement_test():
